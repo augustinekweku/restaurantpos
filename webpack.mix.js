@@ -11,7 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+mix.js('resources/js/app.js', 'public/js').vue()   
+
+
+mix.styles(
+    ['resources/css/app.css',
+    'resources/css/responsive.css',
+    'resources/css/main.css',
+    'resources/css/common.css',
+    'resources/css/responsive.css']
+, 'public/css/all.css'); 
