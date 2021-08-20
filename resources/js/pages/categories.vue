@@ -87,89 +87,88 @@
             </div>
         </Modal>
 
-        <!-- Category editing modal -->
+    <!--  CATEGORY EDITING MODAL -->
         <Modal
             v-model="editModal"
-            title="Edit User"
+            title="Edit Category"
             :mask-closable="false"
             :closable="false"
         >
             <div class="space">
                 <Input
                     type="text"
-                    v-model="editData.firstName"
+                    v-model="editData.category_name"
                     placeholder="First Name"
                 />
             </div>
             <div class="space">
                 <Input
+                    readonly
                     type="text"
-                    v-model="editData.lastName"
-                    placeholder="Last Name"
+                    v-model="editData.desc"
+                    placeholder="Description"
                 />
             </div>
-            <div class="space">
-                <Input
-                    type="email"
-                    v-model="editData.email"
-                    placeholder="Email"
-                />
-            </div>
-            <div class="space">
-                <vue-tel-input
-                    validCharactersOnly
-                    mode="international"
-                    v-model="editData.phone"
-                ></vue-tel-input>
-            </div>
-            <div class="space">
-                <Input
-                    type="password"
-                    v-model="editData.password"
-                    placeholder="Password"
-                />
-            </div>
-            <div class="space">
-                <Input
-                    type="password"
-                    v-model="editData.password2"
-                    placeholder="Confirm Password"
-                />
-            </div>
-            <div class="space">
-                <Select
-                    v-model="editData.userType"
-                    placeholder="Select User type"
-                    style="width:200px"
-                >
-                    <Option value="admin">Admin</Option>
-                    <Option value="waiter">Waiter</Option>
-                    <Option value="cook">Cook</Option>
-                </Select>
-            </div>
+                    <div class="space"></div>
+                    <Upload 
+                        ref="editDataUploads"
+                        :headers="{
+                            'x-csrf-token': token,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }"
+                        :on-success="handleSuccess"
+                        :on-error="handleError"
+                        :format="['jpg', 'jpeg', 'png']"
+                        :max-size="2048"
+                        :on-format-error="handleFormatError"
+                        :on-exceeded-size="handleMaxSize"
+                        type="drag"
+                        action="/app/upload"
+                    >
+                        <div style="padding: 20px 0">
+                            <Icon
+                                type="ios-cloud-upload"
+                                size="52"
+                                style="color: #3399ff"
+                            ></Icon>
+                            <p>Click or drag files here to upload</p>
+                        </div>
+                    </Upload>
+                    <div class="demo-upload-list" v-if="editData.image">
+                        <img :src="`${editData.image}`" />
+
+                        <div class="demo-upload-list-cover">
+                            <Icon
+                                type="ios-trash-outline"
+                                @click="deleteImage(false)"
+                            ></Icon>
+                        </div>
+                    </div>
             <div class="space"></div>
 
             <div slot="footer">
-                <Button type="error" @click="editModal = false">Close</Button>
+                <Button type="error" @click="closeEditModal">Close</Button>
                 <Button
                     type="primary"
                     @click="editCategory"
                     :disabled="isEditing"
                     :loading="isEditing"
-                    >{{ isEditing ? "Editing..." : "Edit User" }}</Button
+                    >{{ isEditing ? "Editing..." : "Edit Category" }}</Button
                 >
-                <div class="text-center more_actions my-2">
+                                <div class="text-center more_actions my-2">
 <Collapse v-model="value1">
         <Panel name="1">
             More Actions
             <p slot="content">
-                <Button type="error" @click="showDeletingModal">Delete User</Button>
+                <Button type="error" @click="showDeletingModal">Delete Category</Button>
             </p>
         </Panel>
     </Collapse>
     </div>
             </div>
         </Modal>
+    <!-- END OF CATEGORY EDITING MODAL -->
+
 
         <deleteModal></deleteModal>
     </div>
@@ -218,10 +217,16 @@ export default {
             selectedRow: [],
             selectedIndex: 0,
             editModal: false,
-            isEditing: false
+            isEditing: false,
+            isEditingItem: false
         };
     },
     methods: {
+        closeEditModal(){
+            this.editModal = false
+            this.isEditingItem = false
+            this.isEditing =false
+        },
         ImgFn(RowObj) {
             return `<img height="40px"  style="width:auto;" src="${RowObj.image}" />`
         },
@@ -242,6 +247,7 @@ export default {
                     this.editModal = true
                     this.selectedIndex = params.row.pageIndex
                     this.selectedRow = params.row
+                    this.isEditingItem = true
 
           },
         showDeletingModal() {
@@ -262,13 +268,13 @@ export default {
             if (this.editData.desc.trim() == "")
                 return this.error("Description is required");
             if (this.editData.image.trim() == "")
-                return this.error("Email is required");
+                return this.error("Imgae is required");
 
             this.isEditing = true;
             this.$Progress.start();
             const res = await this.callApi(
                 "post",
-                "app/edit_user",
+                "app/edit_category",
                 this.editData
             );
             if (res.status === 200) {
@@ -279,6 +285,7 @@ export default {
                 this.success("Category edited successfully");
                 //console.log(this.editData)
                 this.editModal = false;
+                this.isEditingItem = false
             } else {
                 if (res.status === 422) {
                     this.isEditing = false;
@@ -340,7 +347,7 @@ export default {
         handleSuccess(res, file) {
             res = `/uploads/${res}`
             if (this.isEditingItem) {
-                return this.editData.iconImage = res
+                return this.editData.image = res
             }
             this.form.image = res;
         },
@@ -375,7 +382,7 @@ export default {
                 this.isIconImageNew = true
                 image = this.editData.image;
                 this.editData.image = "";
-                this.$refs.editDataUploads.clearFiles();
+                this.$refs.editDataUploads.clearFiles(); 
             }else{
             image = this.form.image;
             this.form.image = "";
