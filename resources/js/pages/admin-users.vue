@@ -92,6 +92,7 @@
                 >
             </div>
         </Modal>
+        <!-- END OF ADDING  MODAL -->
 
         <!-- Staff editing modal -->
         <Modal

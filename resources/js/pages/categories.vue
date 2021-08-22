@@ -17,7 +17,7 @@
                 </vue-good-table>
             </div>
         </div>
-        <!-- Staff adding modal -->
+        <!-- CATEGORY adding modal -->
         <Modal
             v-model="addModal"
             title="Add Category"
@@ -228,7 +228,7 @@ export default {
             this.isEditing =false
         },
         ImgFn(RowObj) {
-            return `<img height="40px"  style="width:auto;" src="${RowObj.image}" />`
+            return `<img height="40px"  style="width:50px; object-fit:cover " src="${RowObj.image}" />`
         },
         onRowDoubleClick(params) {
             // params.row - row object
@@ -253,7 +253,7 @@ export default {
         showDeletingModal() {
             const deleteModalObj = {
                 showDeleteModal: true,
-                deleteUrl: "app/delete_user",
+                deleteUrl: "app/delete_category",
                 data: this.selectedRow,
                 isDeleted: false,
                 msg: "Are you sure you want to delete this category?",
@@ -302,11 +302,11 @@ export default {
         },
         async addCategory() {
             if (this.form.category_name.trim() == "")
-                return this.error("First name is required");
+                return this.error("Category name is required");
             if (this.form.desc.trim() == "")
-                return this.error("Last name is required");
+                return this.error("Description is required");
             if (this.form.image.trim() == "")
-                return this.error("Email is required");
+                return this.error("Image is required");
 
             this.isAdding = true;
             this.$Progress.start();

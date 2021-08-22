@@ -16,6 +16,10 @@ use App\Http\Controllers\AdminController;
 */
 Route::prefix('app')->group(function(){
 
+Route::get('/get_items',[AdminController::class, 'getItems']);
+Route::post('/create_item',[AdminController::class, 'createItem']);
+Route::post('/delete_category',[AdminController::class, 'deleteCategory']);
+Route::post('/edit_category',[AdminController::class, 'editCategory']);
 Route::post('/create_category',[AdminController::class, 'createCategory']);
 Route::get('/get_categories',[AdminController::class, 'getCategories']);
 Route::post('/upload',[AdminController::class, 'upload']);

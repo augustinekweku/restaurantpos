@@ -1,4 +1,60 @@
+.space{
+    margin: 10px 0;
+}
 
+    /* STYLE FOR THE IMAGE CARD */
+
+
+
+
+    .item-card {
+    background: white;
+    min-width: 250px;
+    display: inline-block;
+    margin: auto;
+    border-radius: 19px;
+    /* position: relative; */
+    /* text-align: center; */
+    box-shadow: -1px 7px 17px -12px black;
+    z-index: 9999;
+    margin-bottom: 20px;
+
+    }
+
+    .item-card__image {
+    position: relative;
+    height: 230px;
+    margin-bottom: 15px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    background-size: cover;
+    }
+
+
+    .item-card__title {
+    color: #EC9B3B;
+    text-align: center;
+    margin-top: -5px;
+    }
+
+
+
+    .item-card__description {
+    padding: 0px 10px 10px 30px ;
+    /* margin-bottom: 5px; */
+    }
+
+    .item-card__footer {
+        background: #EC9B3B;
+        border-bottom-left-radius: 14px;
+        border-bottom-right-radius: 14px;
+        color: white;
+        font-size: large;
+    }
+ 
+
+
+    /* END OF STYLE FOR THE IMAGE CARD */
 /* Mobile */
 @media only screen and (max-width: 765px) {
 ._navbar_logo {

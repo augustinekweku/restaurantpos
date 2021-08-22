@@ -33,6 +33,14 @@ Vue.use(VueProgressBar, {
   height: '4px'
 }) 
 
+import VueFab from 'vue-float-action-button'
+Vue.use(VueFab, {
+
+  // opitons 可选iconfont图标或MaterialIcons
+  iconType: 'MaterialDesign',
+  // iconType: 'iconfont'
+})
+
 import common from './common'
 Vue.mixin(common);
 
