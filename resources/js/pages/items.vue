@@ -1,5 +1,5 @@
 <template>
-    <div class="items_page container">
+    <div class="items_page container mx-3 animate__animated animate__fadeIn">
         <Button @click="addModal=true" class="add_fab" size="large" icon="ios-add" shape="circle"></Button>
         <div class="row gx-5 gy-2">
             <h2 class="text-center mb-3">Meal Items</h2>
@@ -24,9 +24,11 @@
                 </Button>
             </div>
         </div>
-        <div class=" mt-2 row gx-5">
-                <div v-for="(item, i) in items" :key="item.id" class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+        <div class=" mt-4 row ">
+                <div v-for="(item, i) in items.data" :key="item.id"
+                    class="col-sm-12 col-md-6 col-lg-3 col-xl-3 animate__animated animate__fadeIn">
                             <div class>
+                                    <!-- start of item card  -->
                                         <div class="item-card">
                                             <div
                                                 v-bind:style="{
@@ -62,7 +64,7 @@
                                                             <Icon
                                                                 @click="
                                                                     showEditItem(
-                                                                        mealpackage,
+                                                                        item,
                                                                         i
                                                                     )
                                                                 "
@@ -81,10 +83,7 @@
                                                         >
                                                             <Icon
                                                                 @click="
-                                                                    showDeletingModal(
-                                                                        mealpackage,
-                                                                        i
-                                                                    )
+                                                                    showDeletingModal(item, i)
                                                                 "
                                                                 type="ios-trash"
                                                             />
@@ -93,10 +92,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- end clash-card barbarian-->
+                                        <!-- end item-card-->
                                     </div>
                                     <!-- end wrapper -->
                 </div>
+                <pagination align="center" :data="items" @pagination-change-page="list"></pagination>
         </div>
 
                 <!-- START OF ITEM ADDING MODAL -->
@@ -187,21 +187,117 @@
             </div>
         </Modal>
         <!-- END OF ADDING  MODAL -->
+
+
+                <!-- START OF ITEM EDITING MODAL -->
+        <Modal
+            v-model="editModal"
+            title="Edit Item"
+            :mask-closable="false"
+            :closable="false"
+        >
+            <div class="space">
+                <Input
+                    type="text"
+                    v-model="editData.item_name"
+                    placeholder="Item Name"
+                />
+            </div>
+            <div class="space"></div>
+            <div class="space">
+                <Input
+                    type="text"
+                    v-model="editData.item_description"
+                    placeholder="Description"
+                />
+            </div>
+            <div class="space">
+                <Select not-found-text="No categories available" v-model="editData.category_id" placeholder="Select Category" width="40px">
+                    <Option 
+                        v-for="(c, i) in categories"
+                        :value="c.id"
+                        :key="i"
+                        >{{ c.category_name }}</Option
+                    >
+                </Select>
+            <div class="space">
+                <Input
+                    type="text"
+                    v-model="editData.price"
+                    placeholder="Price"
+                />
+            </div>
+            </div>
+                    <div class="space"></div>
+                    <Upload 
+                        ref="editDataUploads"
+                        :headers="{
+                            'x-csrf-token': token,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }"
+                        :on-success="handleSuccess"
+                        :on-error="handleError"
+                        :format="['jpg', 'jpeg', 'png']"
+                        :max-size="2048"
+                        :on-format-error="handleFormatError"
+                        :on-exceeded-size="handleMaxSize"
+                        type="drag"
+                        action="/app/upload"
+                    >
+                        <div style="padding: 20px 0">
+                            <Icon
+                                type="ios-cloud-upload"
+                                size="52"
+                                style="color: #3399ff"
+                            ></Icon>
+                            <p>Click or drag files here to upload</p>
+                        </div>
+                    </Upload>
+                    <div class="demo-upload-list" v-if="editData.image">
+                        <img :src="`${editData.image}`" />
+
+                        <div class="demo-upload-list-cover">
+                            <Icon
+                                type="ios-trash-outline"
+                                @click="deleteImage"
+                            ></Icon>
+                        </div>
+                    </div>
+            <div class="space"></div>
+
+            <div slot="footer">
+                <Button type="error" @click="closeEditModal">Close</Button>
+                <Button
+                    type="primary"
+                    @click="editItem"
+                    :disabled="isEditing"
+                    :loading="isEditing"
+                    >{{ isEditing ? "Editing..." : "Edit" }}</Button
+                >
+            </div>
+        </Modal>
+        <!-- END OF EDITING  MODAL -->
+
+            <deleteModal></deleteModal>
+
     </div>
 </template>
 
 <script>
-import fab from "vue-fab";
+import deleteModal from "../components/deleteModal.vue";
+import { mapGetters } from "vuex";
+import pagination from 'laravel-vue-pagination'
 export default {
     components: {
-        fab
+        deleteModal,
+        pagination
     },
     data() {
         return {
             bgColor: "orange",
             position: "top-right",
             categories: [],
-            items:[],
+            items:{},
             addModal:false,
             form:{
                 item_name: "",
@@ -210,11 +306,104 @@ export default {
                 image: "",
                 category_id: null,
             },
+            editData: {
+                item_name: "",
+                item_description: "",
+                price: null,
+                image: "",
+                category_id: null,
+            },
             token: "",
-            isAdding: false
+            isAdding: false,
+            isEditing: false ,
+            editModal: false,
+            deletingIndex: -1
         };
     },
+        mounted(){
+        this.list()
+    },
     methods: {
+        async list(page=1){
+                await axios.get(`/app/get_items?page=${page}`).then(({data})=>{
+                    this.items = data
+                }).catch(({ response })=>{
+                    console.error(response)
+                })
+            },
+        showDeletingModal(item, i) {
+            console.log(item)
+            this.deletingIndex = i;
+            const deleteModalObj = {
+                showDeleteModal: true,
+                deleteUrl: "app/delete_item",
+                data: item,
+                deletingIndex: i,
+                msg: "Are you sure you want to delete this item?",
+                successMsg: "Item deleted successfully"
+            };
+            this.$store.commit("setDeletingModalObj", deleteModalObj);
+            //console.log('delete method called ')
+        },
+        closeEditModal(){
+            this.editModal = false
+            this.isEditing = false
+            this.isEditing =false
+        },
+        async editItem() {
+            if (this.editData.item_name.trim() == "")
+                return this.error("Item name is required");
+            if (this.editData.item_description.trim() == "")
+                return this.error("Item description is required");
+            if (this.editData.image.trim() == "")
+                return this.error("Image is required");
+            if (!this.editData.price)
+                return this.error("Price is required");
+            if (!this.editData.category_id)
+                return this.error("Category is required");
+
+            this.isEditing = true;
+            this.$Progress.start();
+            const res = await this.callApi(
+                "post",
+                "app/edit_item",
+                this.editData
+            );
+            if (res.status === 200) {
+                this.items[this.editingIndex] = this.editData;
+                this.success("Item edited successfully");
+                this.editModal = false;
+                this.$Progress.finish();
+                this.isEditing = false;
+                this.$refs.editDataUploads.clearFiles();
+            }  else {
+                if (res.status === 422) {
+                    this.isEditing = false;
+                    this.$Progress.fail();
+                    for (let i in res.data.errors) {
+                        this.error(res.data.errors[i][0]);
+                    }
+                } else {
+                    this.isEditing = false;
+                    this.$Progress.fail();
+                    this.swr();
+                }
+            }
+        },
+        showEditItem(item, i){
+                        let obj = {
+        				id : item.id,
+                        item_name: item.item_name,
+                        item_description: item.item_description,
+                        image: item.image,
+                        price: item.price,
+                        category_id: item.category_id,
+
+                    }
+                this.editData = obj;
+                this.editModal = true;
+                this.editingIndex = i;
+        },
         async addItem(){
             if (this.form.item_name.trim() == "")
                 return this.error("Item name is required");
@@ -316,6 +505,9 @@ export default {
             this.form.image = "";
             this.$refs.uploads.clearFiles();
             }
+            if (!isAdd) {
+                
+            }
             const res = await this.callApi("post", "app/delete_image", {
                 image: image
             });
@@ -342,7 +534,7 @@ export default {
                 "get",
                 "app/get_items"
             );
-            if ((getItems.status = 201)) {
+            if ((getItems.status = 200)) {
                 this.items = getItems.data;
                 console.log(getItems.data);
             } else {
@@ -354,6 +546,20 @@ export default {
         this.token = window.Laravel.csrfToken;
         this.getCategories();
         this.getItems();
+    },
+
+    computed: {
+        ...mapGetters(["getDeleteModalObj"])
+    },
+    watch: {
+        getDeleteModalObj(obj) {
+            console.log(obj);
+            if (obj.isDeleted) {
+                console.log(obj);
+                this.editModal = false
+                this.items.splice(this.deletingIndex, 1);
+            }
+        }
     }
 };
 </script>
@@ -364,5 +570,11 @@ export default {
     right:50px;
     background: orange;
     float: right;
+}
+.active {
+    z-index: 3;
+    color: #fff;
+    background-color: orange !important;
+    border-color: orange !important;
 }
 </style>

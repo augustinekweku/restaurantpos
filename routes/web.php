@@ -16,6 +16,8 @@ use App\Http\Controllers\AdminController;
 */
 Route::prefix('app')->group(function(){
 
+Route::post('/delete_item',[AdminController::class, 'deleteItem']);
+Route::post('/edit_item',[AdminController::class, 'editItem']);
 Route::get('/get_items',[AdminController::class, 'getItems']);
 Route::post('/create_item',[AdminController::class, 'createItem']);
 Route::post('/delete_category',[AdminController::class, 'deleteCategory']);

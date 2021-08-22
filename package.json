@@ -20,6 +20,7 @@
     "dependencies": {
         "animate.css": "^4.1.1",
         "bootstrap": "^5.1.0",
+        "laravel-vue-pagination": "^2.3.1",
         "view-design": "^4.6.1",
         "vue": "^2.6.14",
         "vue-fab": "^2.3.1",

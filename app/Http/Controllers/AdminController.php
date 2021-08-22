@@ -176,6 +176,36 @@ class AdminController extends Controller
 
     public function getItems()
     {
-        return Item::orderBy('id', 'desc')->get();
+        $items = Item::paginate(2);
+    	return response()->json($items);
+    }
+
+    public function editItem(Request $request)
+    {
+        $this->validate($request, [
+            'item_name' => 'required',
+            'item_description' => 'required',
+            'image' => 'required',
+            'price' => 'required',
+            'category_id' => 'required',
+        ]);
+        return Item::where('id', $request->id)->update([
+            'item_name' => $request->item_name,
+            'item_description' => $request->item_description,
+            'price' => $request->price,
+            'category_id' => $request->category_id,
+            'image' => $request->image,
+        ]);
+    }
+
+    public function deleteItem(Request $request)
+    {
+        //first delete the original file from the server
+        $this->deleteFileFromServer($request->image);
+        //validate request
+        $this->validate($request, [
+            'id' => 'required'
+        ]);
+        return Item::where('id', $request->id)->delete();
     }
 }

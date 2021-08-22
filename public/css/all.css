@@ -55,6 +55,19 @@
 
 
     /* END OF STYLE FOR THE IMAGE CARD */
+
+
+    .page-item.active .page-link {
+        z-index: 3;
+        color: #fff !important;
+        background-color: orange !important;
+        border-color: orange !important;
+    }
+    .page-link{
+        color: orange !important;
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
 /* Mobile */
 @media only screen and (max-width: 765px) {
 ._navbar_logo {
