@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\Role;
+use App\Models\Table;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -177,7 +179,7 @@ class AdminController extends Controller
     public function getItems()
     {
         $items = Item::paginate(2);
-    	return response()->json($items);
+        return response()->json($items);
     }
 
     public function editItem(Request $request)
@@ -207,5 +209,36 @@ class AdminController extends Controller
             'id' => 'required'
         ]);
         return Item::where('id', $request->id)->delete();
+    }
+
+    public function getRoles()
+    {
+        return Role::get();
+    }
+
+    public function createRole(Request $request)
+    {
+        //validate request
+        $this->validate($request, [
+            'role_name' => 'required'
+        ]);
+        return Role::create([
+            'role_name' => $request->role_name,
+        ]);
+    }
+
+    public function createTable(Request $request)
+    {
+        //validate request
+        $this->validate($request, [
+            'table_name' => 'required'
+        ]);
+        return Table::create([
+            'table_name' => $request->table_name,
+        ]);
+    }
+    public function getTables()
+    {
+        return Table::orderBy('id', 'desc')->get();
     }
 }

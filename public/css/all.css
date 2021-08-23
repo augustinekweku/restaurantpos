@@ -68,6 +68,13 @@
         background-color: #e9ecef;
         border-color: #dee2e6;
     }
+
+    .add_fab {
+        top: 140px !important;
+        right: 80px !important;
+        background: orange;
+        float: right;
+    }
 /* Mobile */
 @media only screen and (max-width: 765px) {
 ._navbar_logo {

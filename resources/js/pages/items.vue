@@ -565,12 +565,7 @@ export default {
 </script>
 
 <style scoped>
-.add_fab {
-    top: 140px !important;
-    right:50px;
-    background: orange;
-    float: right;
-}
+
 .active {
     z-index: 3;
     color: #fff;

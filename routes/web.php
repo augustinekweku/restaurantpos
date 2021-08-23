@@ -16,6 +16,10 @@ use App\Http\Controllers\AdminController;
 */
 Route::prefix('app')->group(function(){
 
+Route::get('/get_tables',[AdminController::class, 'getTables']);
+Route::post('/create_table',[AdminController::class, 'createTable']);
+Route::post('/create_role',[AdminController::class, 'createRole']);
+Route::get('/get_roles',[AdminController::class, 'getRoles']);
 Route::post('/delete_item',[AdminController::class, 'deleteItem']);
 Route::post('/edit_item',[AdminController::class, 'editItem']);
 Route::get('/get_items',[AdminController::class, 'getItems']);

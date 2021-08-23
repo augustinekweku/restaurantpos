@@ -21,3 +21,10 @@
         </div>
     </div>
 </template>
+<style scoped>
+._footer_main{
+  position: fixed;
+  bottom: 1px;
+  text-align: center;
+}
+</style>
