@@ -26,7 +26,7 @@
         </div>
         <div class=" mt-4 row ">
                 <div v-for="(item, i) in items.data" :key="item.id"
-                    class="col-sm-12 col-md-6 col-lg-3 col-xl-3 animate__animated animate__fadeIn">
+                    class="col-sm-12 col-md-6 col-lg-3 col-xl-3 animate__animated animate__bounceIn">
                             <div class>
                                     <!-- start of item card  -->
                                         <div class="item-card">

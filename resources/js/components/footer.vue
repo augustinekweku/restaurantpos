@@ -23,6 +23,7 @@
 </template>
 <style scoped>
 ._footer_main{
+    margin-top: 15px;
   position: fixed;
   bottom: 1px;
   text-align: center;

@@ -251,6 +251,10 @@
                                 <p class="_group_name">
                                     <Icon type="ios-more" />
                                 </p>
+                                <MenuItem to="/pos-page" name="pos">
+                                    <Icon type="md-cart" />
+                                    <span class="submenu_text">POS</span>
+                                </MenuItem>
                                 <MenuItem to="/admin-users" name="users">
                                     <Icon type="md-people" />
                                     <span class="submenu_text">Users</span>

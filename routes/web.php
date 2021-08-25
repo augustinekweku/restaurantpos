@@ -16,6 +16,8 @@ use App\Http\Controllers\AdminController;
 */
 Route::prefix('app')->group(function(){
 
+Route::get('/get_category_id/{category_id}',[AdminController::class, 'getCategoryId']);
+Route::get('/get_items_for_pos',[AdminController::class, 'getItemsForPos']);
 Route::get('/get_tables',[AdminController::class, 'getTables']);
 Route::post('/create_table',[AdminController::class, 'createTable']);
 Route::post('/create_role',[AdminController::class, 'createRole']);

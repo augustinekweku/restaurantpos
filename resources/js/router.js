@@ -3,6 +3,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 
+import posPage from './pages/pos-page.vue';
 import adminUsers from './pages/admin-users.vue';
 import categories from './pages/categories.vue';
 import items from './pages/items.vue';
@@ -14,6 +15,11 @@ import roles from './pages/roles.vue';
 
 const routes = [
     //admin routes
+    {
+        path:  '/pos-page',
+        component: posPage,
+        name: 'posPage'
+    },
     {
         path:  '/admin-users',
         component: adminUsers,

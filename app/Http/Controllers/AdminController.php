@@ -241,4 +241,13 @@ class AdminController extends Controller
     {
         return Table::orderBy('id', 'desc')->get();
     }
+    public function getItemsForPos()
+    {
+        return Item::orderBy('id', 'desc')->get();
+    }
+    public function getCategoryId($category_id)
+    {
+        $data =  Category::where('id', '=' , $category_id)->get('category_name');
+        return $data;
+    }
 }

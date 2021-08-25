@@ -6,10 +6,13 @@
                 <div v-for="(table, i) in tables" :key="table.id"
                     class="col-sm-4 col-md-3 col-lg-2 col-xl-2 animate__animated animate__bounceIn">
                     <div>
-                            <Card style="">
+                            <Card style="">        
+                                <Button v-if="table.status==='empty'" slot="extra" :size="buttonSize" type="success"  shape="circle"> {{table.status}}</Button>
+                                <Button v-if="table.status==='occupied'" slot="extra" :size="buttonSize" type="error"  shape="circle"> {{table.status}}</Button>
+                                <Button v-if="table.status==='unpaid'" slot="extra" :size="buttonSize" type="warning"  shape="circle"> {{table.status}}</Button>
                                 <div style="text-align:center">
-                                    <Icon type="md-restaurant" color="orange" size="40"/>
-                                    <h4 class="fw-light">{{table.table_name}}</h4>
+                                    <Icon type="md-restaurant" color="orange" size="50"/>
+                                    <h5 class="fw-light">{{table.table_name}}</h5>
                                 </div>
                             </Card>
                     </div>
