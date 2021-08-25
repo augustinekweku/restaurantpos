@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,7 @@ use App\Http\Controllers\AdminController;
 */
 Route::prefix('app')->group(function(){
 
+Route::post('/create_order_details',[OrderController::class, 'createOrderDetails']);
 Route::get('/get_category_id/{category_id}',[AdminController::class, 'getCategoryId']);
 Route::get('/get_items_for_pos',[AdminController::class, 'getItemsForPos']);
 Route::get('/get_tables',[AdminController::class, 'getTables']);

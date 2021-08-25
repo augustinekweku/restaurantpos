@@ -134,18 +134,24 @@ export default {
         }
     },
     methods:{
-        processOrder(orderDetails, i){
+        async processOrder(orderDetails, i){
             let randomNumber = Math.floor((Math.random() * 1000) + 1)
             
                 let orderForm = {
                 table_id: this.activeTableID,
                 order_number: randomNumber,
                 table_name: this.activeTableName,
+                invoice_number: this.invoice,
                 order_total: this.order_total,
-                paid: this.amount_paid,
-                balance: this.balance
+                order_details: this.orderDetails
             }
             console.log(orderForm)
+            this.$Progress.start();
+            const res = await this.callApi(
+                "post",
+                "app/create_order_details",
+                orderForm
+            );
         },
         cancelOrder(){
             this.orderDetails = []
