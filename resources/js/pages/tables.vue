@@ -1,15 +1,15 @@
 <template>
-    <div class="table_page container m-2 animate__animated animate__fadeIn">
+    <div class="table_page mx-3  m-2 animate__animated animate__fadeIn">
         <Button @click="addModal=true" class="add_fab" size="large" icon="ios-add" shape="circle"></Button>
             <h2 class="text-center mb-3">Meal Items</h2>
-            <div class=" mt-4 row ">
-                <div v-for="(table, i) in tables" :key="table.id"
+            <div class=" mt-4 row gy-2">
+                <div v-for="(table, i) in tables" :key="i"
                     class="col-sm-4 col-md-3 col-lg-2 col-xl-2 animate__animated animate__bounceIn">
                     <div>
                             <Card style="">        
-                                <Button v-if="table.status==='empty'" slot="extra" :size="buttonSize" type="success"  shape="circle"> {{table.status}}</Button>
-                                <Button v-if="table.status==='occupied'" slot="extra" :size="buttonSize" type="error"  shape="circle"> {{table.status}}</Button>
-                                <Button v-if="table.status==='unpaid'" slot="extra" :size="buttonSize" type="warning"  shape="circle"> {{table.status}}</Button>
+                                <Button v-show="table.status==='empty'" slot="extra" :size="buttonSize" type="success"  shape="circle"> {{table.status}}</Button>
+                                <Button v-show="table.status==='occupied'" slot="extra" :size="buttonSize" type="error"  shape="circle"> {{table.status}}</Button>
+                                <Button v-show="table.status==='unpaid'" slot="extra" :size="buttonSize" type="warning"  shape="circle"> {{table.status}}</Button>
                                 <div style="text-align:center">
                                     <Icon type="md-restaurant" color="orange" size="50"/>
                                     <h5 class="fw-light">{{table.table_name}}</h5>
@@ -52,11 +52,13 @@
 export default {
     data(){
         return{
+            buttonSize: 'small',
             addModal: false,
             isAdding: false,
             token: '',
             form: {
-                table_name: ""
+                table_name: "",
+                status: 3
             },
             tables:[],
 
@@ -78,7 +80,8 @@ export default {
                 this.isAdding = false;
                 this.$Progress.finish();
                 this.success("Table added successfully");
-                this.tables.unshift(res.data);
+                //this.tables.unshift(res.data);
+                this.getAllTables()
                 this.addModal = false;
                 this.form.table_name = "";
             } else {
@@ -101,10 +104,10 @@ export default {
                 }
             }
         },
-            async getTables() {
+            async getAllTables() {
             const getTables = await this.callApi(
                 "get",
-                "app/get_tables"
+                "app/get_all_tables"
             );
             if ((getTables.status = 200)) {
                 this.tables = getTables.data;
@@ -115,7 +118,10 @@ export default {
         }
     },
     created(){
-        this.getTables()
+        this.getAllTables()
     }
 }
 </script>
+<style scoped>
+
+</style>

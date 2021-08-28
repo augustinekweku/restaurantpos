@@ -1,5 +1,5 @@
 <template>
-    <div class="pos-page  animate__animated animate__fadeIn">
+    <div class="pos-page   animate__animated animate__fadeIn">
         <div class="row">
             <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                 <div class="one-third active-table-column mb-4">
@@ -17,21 +17,26 @@
                                 <th scope="col">Price</th>
                                 <th scope="col">Qty</th>
                                 <th scope="col">Amount</th>
+                                <th scope="col"><Icon type="md-cog" /></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody v-if="orderDetails.length">
                                 <tr v-for="(orderDetails, i) in orderDetails" :key="i" class="animate__animated animate__fadeIn">
                                 <th scope="row">{{i+1}}</th>
                                 <td>{{orderDetails.item_name}}</td>
                                 <td>{{orderDetails.price}}</td>
                                 <td><input type="number" @change="calcAmount(orderDetails, i)" v-model="orderDetails.quantity" style="width:100px; border:solid 1px grey; padding:2px;"></td>
                                 <td>{{orderDetails.amount}}</td>
+                                <td><Icon @click="removeItem(orderDetails, i)" style="cursor:pointer" type="md-close" color="red" /></td>
                                 </tr>
                                 <tr>
                                     <th colspan="3"></th>
                                     <th >Total</th>
                                     <th >GHS {{order_total}}</th>
                                 </tr>
+                            </tbody>
+                            <tbody v-else>
+                            <tr  class="text-center" ><th colspan="5"><h3 class="fw-light">Empty Cart</h3></th> </tr>
                             </tbody>
                             </table>
                             <div class="d-flex">
@@ -79,7 +84,8 @@
                 <div class="one-third tables-column mb-4">
                     <div class="header p-2 text-center mb-2"><h5 class="fw-light">Tables</h5></div>
                     <Card shadow class="column-container p-2" style="background:white;">
-                        <div class="row gx-2 gy-2">
+                        
+                            <div v-if="tables.length" class=" row gx-2 gy-2 active-tables">
                             <Card  v-for="(table, i) in tables" :key="table.id" style="" class="text-center col-sm-12 col-md-12 col-lg-12">
                                 <p @click="changeTableStatus(table, i)" style="cursor:pointer" slot="title">
                                     <Icon type="md-restaurant"></Icon>
@@ -89,7 +95,11 @@
                                 <Button v-if="table.status==='occupied'"   type="error"  shape="circle"> {{table.status}}</Button>
                                 <Button v-if="table.status==='unpaid'"   type="warning"  shape="circle"> {{table.status}}</Button>                            
                                 </Card>
-                        </div>
+                                </div>
+                                <div v-else>
+                                    <h3 class="p-2 fw-light text-center">No Tables available</h3>
+                                </div>
+                        
                     </Card>
                 </div>
             </div>
@@ -109,16 +119,7 @@ export default {
             order_total: null,
             activeTableName: '',
             activeTableID: null,
-            orderForm:{
-                table_id: null,
-                table_name: '',
-                status: '',
-                order_total: null,
-                paid: null,
-                balance: null,
-                order_number: null,
-                invoice_number: null                
-            },
+            selectedTableIndex: -1,
             orderDetails:[],
             categories: [],
                         columns1: [
@@ -134,9 +135,18 @@ export default {
         }
     },
     methods:{
+        removeItem(orderDetails, i){
+            this.orderDetails.splice(i,1)
+            this.calcOrderTotal()
+        },
         async processOrder(orderDetails, i){
             let randomNumber = Math.floor((Math.random() * 1000) + 1)
-            
+            if (!this.activeTableID) {
+                return this.error("No Table selected")
+            }
+            if (!this.orderDetails.length) {
+                return this.error("Cart is empty")
+            }
                 let orderForm = {
                 table_id: this.activeTableID,
                 order_number: randomNumber,
@@ -152,11 +162,21 @@ export default {
                 "app/create_order_details",
                 orderForm
             );
+            if (res.status == 200) {
+                this.success("Order succesfully processed")
+                this.tables.splice(this.selectedTableIndex, 1)
+                this.generateInvoice()
+                this.orderDetails = []
+                this.order_total= null
+                this.activeTableName = ""
+                this.activeTableID = null
+            }
         },
         cancelOrder(){
             this.orderDetails = []
             this.order_total= null
             this.activeTableName = ""
+            this.activeTableID = null
         },
         calcOrderTotal(){           
             let total = this.orderDetails.reduce((total, obj) => parseFloat(obj.amount) + total,0)
@@ -191,23 +211,27 @@ export default {
             this.calcOrderTotal()
           },
         changeTableStatus(table, i){
+            if (this.tables[i].status === "unpaid") {
+                return this.error("This table has not been cleared yet!")
+            }
+            //check if another table is already selected
             if (this.activeTableID && this.activeTableID !== this.tables[i].id) {
                 return this.error("Another table already selected")
             }
             if (this.tables[i].status === "occupied" && this.activeTableID == this.tables[i].id) {
                 this.tables[i].status = "empty" 
                 this.activeTableName = ''
-                this.activeTableID = null
-                return this.orderDetailsForm.table_id = null
+                return this.activeTableID = null
             }
             this.tables[i].status === "empty" ? this.tables[i].status = "occupied" : this.tables[i].status = "empty" 
             this.activeTableID = this.tables[i].id
             this.activeTableName = this.tables[i].table_name
+            this.selectedTableIndex = i
         },
-            async getTables() {
+            async getEmptyAndUnpaidTables() {
             const getTables = await this.callApi(
                 "get",
-                "app/get_tables"
+                "app/get_empty_and_unpaid_tables"
             );
             if ((getTables.status = 200)) {
                 this.tables = getTables.data;
@@ -255,7 +279,7 @@ export default {
         }
     },
     created() {
-        this.getTables()
+        this.getEmptyAndUnpaidTables()
         this.getItemsForPos()
         this.getCategories()
         this.generateInvoice()

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Category;
 use App\Models\Item;
 use App\Models\Role;
+use App\Models\User;
 use App\Models\Table;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -231,13 +232,23 @@ class AdminController extends Controller
     {
         //validate request
         $this->validate($request, [
-            'table_name' => 'required'
+            'table_name' => 'required',
+            'status' => 'required'
         ]);
         return Table::create([
             'table_name' => $request->table_name,
+            'status' => $request->status,
         ]);
     }
-    public function getTables()
+    public function getEmptyAndUnpaidTables()
+    {
+        //return Table::where('status', 3)->get();
+        $getTables = DB::table('Tables')->where('status', '=', 2)
+            ->orWhere('status', '=', 3)
+            ->get();
+        return $getTables;
+    }
+    public function getAllTables()
     {
         return Table::orderBy('id', 'desc')->get();
     }
@@ -247,7 +258,7 @@ class AdminController extends Controller
     }
     public function getCategoryId($category_id)
     {
-        $data =  Category::where('id', '=' , $category_id)->get('category_name');
+        $data =  Category::where('id', '=', $category_id)->get('category_name');
         return $data;
     }
 }

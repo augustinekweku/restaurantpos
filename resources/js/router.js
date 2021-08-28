@@ -3,6 +3,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 
+import readyOrders from './pages/ready-orders.vue';
 import posPage from './pages/pos-page.vue';
 import adminUsers from './pages/admin-users.vue';
 import categories from './pages/categories.vue';
@@ -15,6 +16,11 @@ import roles from './pages/roles.vue';
 
 const routes = [
     //admin routes
+    {
+        path:  '/ready-orders',
+        component: readyOrders,
+        name: 'readyOrders'
+    },
     {
         path:  '/pos-page',
         component: posPage,

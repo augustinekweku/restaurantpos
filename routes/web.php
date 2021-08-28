@@ -17,10 +17,16 @@ use App\Http\Controllers\OrderController;
 */
 Route::prefix('app')->group(function(){
 
+Route::post('/checkout_order',[OrderController::class, 'checkoutOrder']);
+Route::get('/get_ready_orders',[OrderController::class, 'getReadyOrders']);
+Route::post('/order_confirmed_by_cook/{order_id}',[OrderController::class, 'orderConfirmedByCook']);
+Route::get('/get_requested_orders',[OrderController::class, 'getRequestedOrders']);
 Route::post('/create_order_details',[OrderController::class, 'createOrderDetails']);
+
 Route::get('/get_category_id/{category_id}',[AdminController::class, 'getCategoryId']);
 Route::get('/get_items_for_pos',[AdminController::class, 'getItemsForPos']);
-Route::get('/get_tables',[AdminController::class, 'getTables']);
+Route::get('/get_empty_and_unpaid_tables',[AdminController::class, 'getEmptyAndUnpaidTables']);
+Route::get('/get_all_tables',[AdminController::class, 'getAllTables']);
 Route::post('/create_table',[AdminController::class, 'createTable']);
 Route::post('/create_role',[AdminController::class, 'createRole']);
 Route::get('/get_roles',[AdminController::class, 'getRoles']);

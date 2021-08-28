@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Table;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -39,8 +40,50 @@ class OrderController extends Controller
                 //echo json_encode($x['item_name']);
             }
                 OrderDetail::insert($orderDetails);
-
+                Table::where('id', $request->table_id)->update([
+                    'status' => 1,
+                ]);
+                //$updateTable->save();
                 DB::commit();
 
     }
+
+    public function getRequestedOrders(Request $request)
+    {
+         $orders = Order::where('status','=', 2)->with('orderDetails')->paginate(2);
+         return response()->json($orders);
+
+        //$getOrders = DB::table('Orders')->where('status', '=', 2)-with('orderDetails')->get();
+        //return $getOrders;
+    }
+    public function getReadyOrders(Request $request)
+    {
+         $orders = Order::where('status', 3)->with('orderDetails')->paginate(2);
+         return response()->json($orders);
+
+        //$getOrders = DB::table('Orders')->where('status', '=', 2)-with('orderDetails')->get();
+        //return $getOrders;
+    }
+    public function orderConfirmedByCook($order_id)
+    {
+        return Order::where('id', $order_id)->update([
+            'ready' => 1,
+            'status' => 3
+        ]);
+    }
+
+    public function checkoutOrder(Request $request)
+    {
+        return Order::where('id', $request->id)->update([
+            'status' => $request->status,
+            'balance' => $request->balance,
+            'paid' => $request->paid,
+        ]);
+    }
+
+
+
+
+
+
 }

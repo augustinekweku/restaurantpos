@@ -1,0 +1,38 @@
+
+table {
+    font-family: "Lucida Console", "Courier New", monospace;
+    border-collapse: collapse;
+  }
+   th {
+    background: #ccc;
+  }
+  
+  th, td {
+    border: 2px solid #ccc;
+    padding: 3px;
+  }
+  
+  tr:nth-child(even) {
+    background: #efefef;
+  }
+  .header{
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .right-info{
+    text-align: right;
+  }
+  .print-content {
+    margin: 0 auto !important;
+    text-align: center;
+  }
+  input{
+    padding-top: 0 !important;
+    margin: auto !important;
+    height: auto !important;
+    border: none !important;
+  }
+  .input-number {
+    display: table-cell;
+    height: 24px;
+  }

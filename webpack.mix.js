@@ -11,13 +11,14 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js').vue()   
-
+mix.js('resources/js/app.js', 'public/js').vue()    
+mix.js('resources/js/print.min.js', 'public/js')
 
 mix.styles(
     ['resources/css/app.css',
     'resources/css/responsive.css',
     'resources/css/main.css',
     'resources/css/common.css',
+    'resources/css/print.min.css',
     'resources/css/responsive.css']
 , 'public/css/all.css'); 

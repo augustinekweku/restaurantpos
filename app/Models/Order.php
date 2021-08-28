@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Table;
+use App\Models\OrderDetail;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
@@ -19,4 +21,13 @@ class Order extends Model
         'invoice_number',
         'status',
     ];
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id', 'id');
+    }
+    public function table()
+    {
+        return $this->belongsTo(Table::class);
+    }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Item;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OrderDetail extends Model
 {
@@ -17,4 +18,9 @@ class OrderDetail extends Model
         'quantity',
         'amount'
     ];
+
+    public function item()
+    {
+        return $this->hasOne(Item::class);
+    }
 }

@@ -284,6 +284,15 @@
                                         > Orders</span
                                     >
                                 </MenuItem>
+                                <MenuItem
+                                    to="/ready-orders"
+                                    name="ready-orders"
+                                >
+                                    <Icon type="ios-clock" />
+                                    <span class="submenu_text"
+                                        > Ready Orders</span
+                                    >
+                                </MenuItem>
                             </MenuGroup>
                         </Menu>
                     </div>

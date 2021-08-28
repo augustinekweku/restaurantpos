@@ -96,7 +96,7 @@
                                     </div>
                                     <!-- end wrapper -->
                 </div>
-                <pagination align="center" :data="items" @pagination-change-page="list"></pagination>
+                <pagination class="mb-2 mt-5" align="center" :data="items" @pagination-change-page="list"></pagination>
         </div>
 
                 <!-- START OF ITEM ADDING MODAL -->
