@@ -1,7 +1,7 @@
 <template>
     <div class="table_page mx-3  m-2 animate__animated animate__fadeIn">
         <Button @click="addModal=true" class="add_fab" size="large" icon="ios-add" shape="circle"></Button>
-            <h2 class="text-center mb-3">Meal Items</h2>
+            <h2 class="text-center mb-3">Tables</h2>
             <div class=" mt-4 row gy-2">
                 <div v-for="(table, i) in tables" :key="i"
                     class="col-sm-4 col-md-3 col-lg-2 col-xl-2 animate__animated animate__bounceIn">

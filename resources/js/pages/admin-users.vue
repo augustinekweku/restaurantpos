@@ -6,15 +6,13 @@
             </div>
         </div>
 
-        <div class>
+        <div >
             <div class="users_table">
                 <vue-good-table
                 :columns="columns1"
                 @on-row-dblclick="onRowDoubleClick"
                     :rows="users"
                     :line-numbers="true"
-                    :select-options="{ enabled: true,
-                    selectOnCheckboxOnly: true,}"
                     :search-options="{ enabled: true }"
                     :pagination-options="{
                             enabled: true
@@ -213,28 +211,6 @@ export default {
                 userType: "",
                 phone: ""
             },
-            columns: [
-                {
-                    title: "First Name",
-                    key: "firstName"
-                },
-                {
-                    title: "Last Name",
-                    key: "lastName"
-                },
-                {
-                    title: "Email",
-                    key: "email"
-                },
-                {
-                    title: "User Type",
-                    key: "userType"
-                },
-                {
-                    title: "Phone",
-                    key: "phone"
-                }
-            ],
             columns1: [
                 {
                     label: "First Name",

@@ -16,8 +16,13 @@
                 "
             >
                 <div class="_navbar_left">
-                    <div class="_navbar_logo">
-                        <h3>Somewhere</h3>
+                    <div class="_navbar_logo d-flex">
+                        <div>
+                        <h2 class="_navbar_logo_img">S</h2>
+                        </div>
+                        <div>
+                        <h3 class="_navbar_logo_img_text">somewhere</h3>
+                        </div>
                     </div>
 
                     <!-- TOP BAR -->
@@ -251,48 +256,136 @@
                                 <p class="_group_name">
                                     <Icon type="ios-more" />
                                 </p>
+                                <Submenu v-if="$store.state.user.userType ==='waiter' 
+                                || $store.state.user.userType === 'admin'" name="waiter">
+                                <template slot="title">
+                                    <Icon type="md-person" />
+                                    <span class="submenu_text">Waiter</span>
+                                </template>
                                 <MenuItem to="/pos-page" name="pos">
-                                    <Icon type="md-cart" />
+                                    <Icon type="md-cart" style="color:#275655 !important"/>
                                     <span class="submenu_text">POS</span>
-                                </MenuItem>
-                                <MenuItem to="/admin-users" name="users">
-                                    <Icon type="md-people" />
-                                    <span class="submenu_text">Users</span>
-                                </MenuItem>
-                                <MenuItem to="/items" name="items">
-                                    <Icon type="md-pizza" />
-                                    <span class="submenu_text">Items</span>
-                                </MenuItem>
-                                <MenuItem to="/categories" name="categories">
-                                    <Icon type="md-apps" />
-                                    <span class="submenu_text">Categories</span>
-                                </MenuItem>
-                                <MenuItem to="/roles" name="roles">
-                                    <Icon type="md-contacts" />
-                                    <span class="submenu_text">User Roles</span>
-                                </MenuItem>
-                                <MenuItem to="/tables" name="tables">
-                                    <Icon type="md-restaurant" />
-                                    <span class="submenu_text">Tables</span>
-                                </MenuItem>
-                                <MenuItem
-                                    to="/orders"
-                                    name="orders"
-                                >
-                                    <Icon type="ios-clock" />
-                                    <span class="submenu_text"
-                                        > Orders</span
-                                    >
                                 </MenuItem>
                                 <MenuItem
                                     to="/ready-orders"
                                     name="ready-orders"
+                                    
                                 >
-                                    <Icon type="ios-clock" />
+                                    <Icon type="md-alarm" style="color:green !important" />
                                     <span class="submenu_text"
                                         > Ready Orders</span
                                     >
                                 </MenuItem>
+                                </Submenu>
+
+
+
+                                <MenuItem v-if="$store.state.user.userType === 'admin'"
+                                to="/admin-users" name="users">
+                                    <Icon type="md-people" />
+                                    <span class="submenu_text">Users</span>
+                                </MenuItem>
+                                <MenuItem v-if="$store.state.user.userType === 'cook' ||
+                                $store.state.user.userType === 'admin'" 
+                                to="/items" name="items">
+                                    <Icon type="md-pizza" style="color:orange !important"/>
+                                    <span class="submenu_text">Items</span>
+                                </MenuItem>
+                                <MenuItem v-if="$store.state.user.userType === 'cook' ||
+                                $store.state.user.userType === 'admin'" to="/categories" name="categories">
+                                    <Icon type="md-apps" />
+                                    <span class="submenu_text">Categories</span>
+                                </MenuItem>
+
+                                <Submenu v-if="$store.state.user.userType === 'cook' ||
+                                $store.state.user.userType === 'admin'"
+                                name="cook">
+                                <template slot="title">
+                                    <Icon type="md-person" />
+                                    <span class="submenu_text">Chef</span>
+                                </template>
+                                <MenuItem
+                                    to="/orders"
+                                    name="orders"
+                                >
+                                    <Icon type="md-clock" style="color:#2d8a99 !important" />
+                                    <span class="submenu_text"
+                                        > Orders</span
+                                    >
+                                </MenuItem>
+                                </Submenu>
+
+
+
+                                <MenuItem v-if="$store.state.user.userType === 'admin'"
+                                to="/roles" name="roles">
+                                    <Icon type="md-contacts" />
+                                    <span class="submenu_text">User Roles</span>
+                                </MenuItem>
+                                <MenuItem to="/reports" v-if="$store.state.user.userType === 'admin'"
+                                name="reports">
+                                    <Icon type="md-analytics" />
+                                    <span class="submenu_text">Reports</span>
+                                </MenuItem>
+            
+                                <MenuItem v-if="$store.state.user.userType === 'admin'" 
+                                to="/companies"  name="companies">
+                                    <Icon type="ios-grid" />
+                                    <span class="submenu_text">Companies</span>
+                                </MenuItem>
+                                <MenuItem v-if="$store.state.user.userType === 'admin' ||
+                                $store.state.user.userType === 'cook'
+                                || $store.state.user.userType === 'waiter'"
+                                to="/tables" name="tables" >
+                                    <Icon type="md-restaurant" style="color:green !important"/>
+                                    <span class="submenu_text">Tables</span>
+                                </MenuItem>
+
+                                <Submenu name="credit">
+                                <template slot="title">
+                                    <Icon type="md-card" style="color:#7a4a59 !important" />
+                                    <span class="submenu_text" style="color:#7a4a59 !important">Credit</span>
+                                </template>
+                                <MenuItem
+                                    to="/creditor-pos"
+                                    name="creditor-pos"
+                                    style="color:#7a4a59 !important" 
+                                    v-if="$store.state.user.userType === 'admin'
+                                    || $store.state.user.userType === 'waiter'"
+                                >
+                                    <Icon type="ios-card" style="color:#7a4a59 !important" />
+                                    <span class="submenu_text"
+                                        > Creditor POS</span
+                                    >
+                                </MenuItem>
+                                <MenuItem 
+                                    to="/creditor-orders"
+                                    name="creditor-orders"
+                                    style="color:#7a4a59 !important"
+                                    v-if="$store.state.user.userType === 'admin' ||
+                                $store.state.user.userType === 'cook'"
+                                >
+                                    <Icon type="ios-clock" style="color:#7a4a59 !important" />
+                                    <span class="submenu_text"
+                                        > Creditor Orders</span
+                                    >
+                                </MenuItem>
+                                <MenuItem
+                                    to="/creditor-ready-orders"
+                                    name="creditor-ready-orders"
+                                    style="color:#7a4a59 !important"
+                                    v-if="$store.state.user.userType === 'admin' ||
+                                $store.state.user.userType === 'waiter'"
+                                >
+                                    <Icon type="ios-alarm" style="color:#7a4a59 !important" />
+                                    <span class="submenu_text"
+                                        > Creditor Ready Orders</span
+                                    >
+                                </MenuItem>
+
+                                </Submenu>
+
+
                             </MenuGroup>
                         </Menu>
                     </div>
@@ -349,7 +442,7 @@
                         : '_login_layout'
                 ]"
             >
-                <div class="main-page">
+                <div class="container-fluid">
                 <router-view></router-view>
                 </div>
                 <Footer
@@ -369,6 +462,7 @@
 <script>
 import Footer from "./footer.vue";
 export default {
+    props: ['user'],
     components: {
         Footer,
     },
@@ -403,13 +497,18 @@ export default {
             this.darkMode = true;
         }
     },
+
     created() {
+        this.$store.commit('setUpdateUser', this.user)
+        console.log("state",this.$store.state.user)
         this.activeRoute = this.$route.name;
+
     }
 };
 </script>
 
 <style scoped>
+
 ._navbar_logo{
     color: orange;
 }

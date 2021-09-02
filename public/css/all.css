@@ -75,6 +75,13 @@
         background: orange;
         float: right;
     }
+
+    .ivu-card-head{
+        padding: 7px 8px !important;
+    }
+     .table_card .ivu-card-body {
+        padding: 9px !important;
+    }
 /* Mobile */
 @media only screen and (max-width: 765px) {
 ._navbar_logo {
@@ -146,7 +153,6 @@
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     padding: 14px 0;
-    margin: 0 15px;
 }
 ._footer_main_left {
     flex: 0 0 100%;
@@ -1051,7 +1057,6 @@
 ._footer_main {
     height: 60px;
     display: flex;
-    margin: 0 25px;
     align-items: center;
     border-top: 1px solid #edf2f9;
     justify-content: space-between;
@@ -6401,7 +6406,6 @@ a{
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     padding: 14px 0;
-    margin: 0 15px;
 }
 ._footer_main_left {
     flex: 0 0 100%;

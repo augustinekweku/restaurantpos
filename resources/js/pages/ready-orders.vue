@@ -36,18 +36,16 @@
                                 </tr>
                                 <tr>
                                     <th colspan="2"></th>
-                                    <th class="text-end">Total </th>
-                                    <th  style="text-align:right" colspan="2">GHS {{order.order_total}}</th>
+                                    <th class="text-end">Total: </th>
+                                    <th  style="text-align:right" colspan="2">GH₵ {{order.order_total}}</th>
                                 </tr>
                                 <tr>
-                                    <th colspan="2"></th>
-                                    <th class="text-end">Paid </th>
-                                    <th style="text-align:right"  colspan="2"> GHS &nbsp; <InputNumber @on-change="calcBalance(order, i)"  :min="1" :step="0.5" v-model="order.paid"></InputNumber></th>
+                                    <th colspan="1"></th>
+                                    <th colspan="4"> <div class="d-flex align-items-center justify-content-end"><div>Paid: &nbsp; </div> <div> GH₵ </div> &nbsp; <div><InputNumber @on-change="calcBalance(order, i)"  :min="1" :step="0.5" v-model="order.paid"></InputNumber> </div> </div> </th>
                                 </tr>
                                 <tr>
-                                    <th colspan="2"></th>
-                                    <th class="text-end ps-2">Balance </th>
-                                    <th style="text-align:right" colspan="2"> GHS {{order.balance}}</th>
+                                    <th colspan="1"></th>
+                                    <th colspan="4"> <div class="d-flex align-items-center justify-content-end"><div>Balance: &nbsp; </div> <div> GH₵ </div> &nbsp; <div><InputNumber v-model="order.balance" readonly></InputNumber></div> </div> </th>
                                 </tr>
                             </tbody>
                             </table>
@@ -111,18 +109,18 @@
                                 <tr>
                                     <th colspan="2"></th>
                                     <th class="text-end">Total </th>
-                                    <th  style="text-align:right" colspan="2">GHS {{printOrderData.order_total}}</th>
+                                    <th  style="text-align:right" colspan="2">GH₵ {{printOrderData.order_total}}</th>
                                 </tr>
                                 <tr>
                                     <th colspan="2"></th>
                                     <th class="text-end">Paid </th>
 
-                                    <th style="text-align:right"  colspan="2"> GHS {{paid}}</th>
+                                    <th style="text-align:right"  colspan="2"> GH₵ {{paid}}</th>
                                 </tr>
                                 <tr>
                                     <th colspan="2"></th>
                                     <th class="text-end ps-2">Balance </th>
-                                    <th style="text-align:right" colspan="2"> GHS {{balance}}</th>
+                                    <th style="text-align:right" colspan="2"> GH₵ {{balance}}</th>
                                 </tr>
                             </tbody>
                             </table>
@@ -197,9 +195,7 @@ export default {
             if (res.data == 1) {
                 this.success("Order succesfully checked out")
                 printJS({ printable:'print-block',css:'/css/print.css',  type:'html'})
-                this.Orders.data.splice(this.selectedTableIndex, 1)
-                this.balance = null
-                this.paid= null
+                this.getReadyOrders()
             }
         },
 
@@ -210,6 +206,12 @@ export default {
                 this.paid = parseFloat(this.Orders.data[i].paid)
             },
             showPrintModal(order, i){
+                if (!this.paid) {
+                    return this.error("Paid field is empty")
+                }
+                if (this.paid < order.order_total) {
+                    return this.error("Paid amount is less than Order total")
+                }
                 this.selectedOrderIndex = i
                 let today = new Date();
                 let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();

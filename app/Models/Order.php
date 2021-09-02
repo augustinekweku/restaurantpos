@@ -20,6 +20,7 @@ class Order extends Model
         'order_number',
         'invoice_number',
         'status',
+        'order_type',
     ];
 
     public function orderDetails()

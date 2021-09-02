@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="_3border_color _footer_main">
-            <div class="_footer_main_left">
-                <p class="_footer_copy">Developed by<strong> <a target="_blank" href="https://augustinenani.netlify.app/">Augustine</a> </strong> All rights reserved.</p>
+        <div class="_3border_color _footer_main px-3 mt-4 ">
+            <div class="_footer_main_left text-center">
+                <p class="_footer_copy"> Developed by <strong> <a target="_blank" href="https://augustinenani.netlify.app/"> Nanitech</a> </strong> &copy; 2021 All rights reserved.</p>
             </div>
 
             <div class="_footer_main_right">
@@ -23,6 +23,7 @@
 </template>
 <style scoped>
 ._footer_main{
+
     width: 100%;
     margin-top: 25px;
   position: fixed;
@@ -30,6 +31,6 @@
   bottom: 1px;
   text-align: center;
   background: white;
-  box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+  /* box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75); */
 }
 </style>

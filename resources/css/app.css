@@ -75,3 +75,10 @@
         background: orange;
         float: right;
     }
+
+    .ivu-card-head{
+        padding: 7px 8px !important;
+    }
+     .table_card .ivu-card-body {
+        padding: 9px !important;
+    }

@@ -179,7 +179,7 @@ class AdminController extends Controller
 
     public function getItems()
     {
-        $items = Item::paginate(2);
+        $items = Item::paginate(10);
         return response()->json($items);
     }
 
@@ -245,7 +245,7 @@ class AdminController extends Controller
         //return Table::where('status', 3)->get();
         $getTables = DB::table('Tables')->where('status', '=', 2)
             ->orWhere('status', '=', 3)
-            ->get();
+            ->limit(6)->get();
         return $getTables;
     }
     public function getAllTables()

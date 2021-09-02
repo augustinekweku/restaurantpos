@@ -12,6 +12,9 @@ export default new Vuex.Store({
             isDeleted: false,
             msg: 'sadasdas'
         },
+        user: {
+            user: false,
+        },
 
     },
     getters: {
@@ -36,6 +39,10 @@ export default new Vuex.Store({
         },
         setDeletingModalObj(state, data) {
             state.deleteModalObj = data
+        },
+
+        setUpdateUser(state, data) {
+            state.user = data
         },
 
     },

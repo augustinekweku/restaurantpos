@@ -21,8 +21,8 @@
                 </Button>
             </div>
         </div>
-        <div v-if="Orders.data" class=" mt-4 row gy-2">
-                <div v-if="Orders.data.length" class="">
+        <div v-if="Orders.data" class=" mt-4 ">
+                <div v-if="Orders.data.length" class="row gy-2">
                 <div v-for="(order, i) in Orders.data" :key="i"
                     class="mb-4 col-sm-12 col-md-6 col-lg-3 col-xl-3 animate__animated animate__bounceIn">
                             <div class>
@@ -43,7 +43,7 @@
                                     <ul class="p-2">
                                         <li v-for="(orderDetail, i) in order.order_details" :key="i">
                                             <p class="fs-6 pb-1">
-                                                {{orderDetail.item_name}}
+                                                {{orderDetail.item_name}}  X <b>{{orderDetail.quantity}} </b>
                                             </p>
                                         </li>
                                     </ul>

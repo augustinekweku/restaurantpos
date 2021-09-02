@@ -1,5 +1,5 @@
 <template>
-    <div class="items_page container mx-3 animate__animated animate__fadeIn">
+    <div class="items_page container mx-3 animate__animated animate__fadeIn mb-5">
         <Button @click="addModal=true" class="add_fab" size="large" icon="ios-add" shape="circle"></Button>
         <div class="row gx-5 gy-2">
             <h2 class="text-center mb-3">Meal Items</h2>
@@ -24,7 +24,7 @@
                 </Button>
             </div>
         </div>
-        <div class=" mt-4 row ">
+        <div class=" my-4 row ">
                 <div v-for="(item, i) in items.data" :key="item.id"
                     class="col-sm-12 col-md-6 col-lg-3 col-xl-3 animate__animated animate__bounceIn">
                             <div class>
@@ -182,7 +182,7 @@
                     @click="addItem"
                     :disabled="isAdding"
                     :loading="isAdding"
-                    >{{ isAdding ? "Adding..." : "Add Category" }}</Button
+                    >{{ isAdding ? "Adding..." : "Add Item" }}</Button
                 >
             </div>
         </Modal>
@@ -370,7 +370,7 @@ export default {
                 this.editData
             );
             if (res.status === 200) {
-                this.items[this.editingIndex] = this.editData;
+                this.items.data[this.editingIndex] = this.editData;
                 this.success("Item edited successfully");
                 this.editModal = false;
                 this.$Progress.finish();
@@ -427,7 +427,7 @@ export default {
                 this.isAdding = false;
                 this.$Progress.finish();
                 this.success("Food Item added successfully");
-                this.categories.unshift(res.data);
+                this.items.data.unshift(res.data);
                 this.addModal = false;
                 this.form.item_name = "";
                 this.form.item_description = "";
@@ -557,7 +557,7 @@ export default {
             if (obj.isDeleted) {
                 console.log(obj);
                 this.editModal = false
-                this.items.splice(this.deletingIndex, 1);
+                this.items.data.splice(this.deletingIndex, 1);
             }
         }
     }

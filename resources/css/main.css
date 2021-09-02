@@ -721,7 +721,6 @@
 ._footer_main {
     height: 60px;
     display: flex;
-    margin: 0 25px;
     align-items: center;
     border-top: 1px solid #edf2f9;
     justify-content: space-between;
