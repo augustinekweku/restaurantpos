@@ -1,10 +1,10 @@
 <template>
-    <div class="items_page container mx-3 animate__animated animate__fadeIn mb-5">
-        <Button @click="addModal=true" class="add_fab" size="large" icon="ios-add" shape="circle"></Button>
+    <div class=" mt-3 items_page container mx-3 animate__animated animate__fadeIn mb-5">
+        <Button @click="addModal=true" class="add_fab shadow m-3" type="warning" size="large" icon="md-add" shape="circle"></Button>
         <div class="row gx-5 gy-2">
             <h2 class="text-center mb-3">Meal Items</h2>
             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                <Select placeholder="Select Category" width="40px">
+                <Select not-found-text="No categries creeated" placeholder="Select Category" width="40px">
                     <Option
                         v-for="(c, i) in categories"
                         :value="c.id"
@@ -47,18 +47,20 @@
                                             <div
                                                 v-html="item.item_description"
                                                 class="item-card__description"
-                                            ></div>
+                                            >
+                                            </div>
+                                            <p class="item-card__description"> <b> Stock:</b> {{item.stock}}</p>
 
                                             <div
                                                 class="item-card__footer px-3 py-2 d-flex justify-content-between"
                                             >
-                                                <div class="one-third">
+                                                <div class="one-fourth">
                                                     <div >
                                                         ₵ {{ item.price }}
                                                     </div>
                                                 </div>
 
-                                                <div class="one-third">
+                                                <div class="one-fourth">
                                                     <div >
                                                         <Tooltip content="Edit">
                                                             <Icon
@@ -74,8 +76,24 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="one-fourth">
+                                                    <div >
+                                                        <Tooltip content="Add to stock">
+                                                            <Icon
+                                                                @click="
+                                                                    showAddStockModal(
+                                                                        item,
+                                                                        i
+                                                                    )
+                                                                "
+                                                                type="md-add"
+                                                            />
+                                                        </Tooltip>
+                                                    </div>
+                                                </div>
+
                                                 <div
-                                                    class="one-third no-border"
+                                                    class="one-fourth no-border"
                                                 >
                                                     <div >
                                                         <Tooltip
@@ -119,6 +137,15 @@
                     type="text"
                     v-model="form.item_description"
                     placeholder="Description"
+                />
+            </div>
+            <div class="space">
+                <Input
+                    type="number"
+                    min="1"
+                    v-model="form.stock"
+                    placeholder="Stock"
+                
                 />
             </div>
             <div class="space">
@@ -278,6 +305,31 @@
         </Modal>
         <!-- END OF EDITING  MODAL -->
 
+        <!-- ADD STOCK MODAL -->
+
+            <Modal
+        v-model="AddStockModal"
+        :title="addStockObj.item_name"
+        @on-ok="addStock"
+        @on-cancel="closeStockModal">
+            <div class="space">
+                <Input
+                    type="number"
+                    v-model="addStockObj.quantity"
+                    placeholder="Add to Stock here"
+                />
+            </div>
+                        <div slot="footer">
+                <Button type="error" @click="AddStockModal = false">Close</Button>
+                <Button
+                    type="primary"
+                    @click="addStock"
+                    >Submit</Button
+                >
+            </div>
+    </Modal>
+        <!-- END OF ADD STOCK MODAL -->
+
             <deleteModal></deleteModal>
 
     </div>
@@ -299,12 +351,19 @@ export default {
             categories: [],
             items:{},
             addModal:false,
+            AddStockModal: false,
+            addStockObj:{
+                item_id: null,
+                item_name: "",
+                quantity: null
+            },
             form:{
                 item_name: "",
                 item_description: "",
                 price: null,
                 image: "",
                 category_id: null,
+                stock: null,
             },
             editData: {
                 item_name: "",
@@ -331,6 +390,28 @@ export default {
                     console.error(response)
                 })
             },
+        showAddStockModal(item, i){
+            this.AddStockModal = true
+            let obj ={
+                item_id: item.id,
+                item_name: item.item_name,
+                stock: item.stock,
+                qty_left: item.qty_left
+            }
+            this.addStockObj = obj
+        },
+        async addStock(){
+            if (!this.addStockObj.quantity)
+                return this.error("Quantity is required");
+            const res = await this.callApi(
+                "post",
+                "app/add_stock",
+                this.addStockObj
+            );        
+        },
+        closeStockModal(){
+            this.AddStockModal = false
+        },
         showDeletingModal(item, i) {
             console.log(item)
             this.deletingIndex = i;

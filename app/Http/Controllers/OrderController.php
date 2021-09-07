@@ -9,6 +9,7 @@ use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Models\Creditor_order;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -23,6 +24,8 @@ class OrderController extends Controller
                 //     'quantity' => 'required',
                 //     'amount' => 'required',
                 // ]);
+            $user = Auth::user();
+            
             
                 //insert order details
             $order = Order::create([
@@ -33,6 +36,7 @@ class OrderController extends Controller
                 'invoice_number' => $request->invoice_number,
                 'order_type' => $request->order_type,
                 'status' => 2,
+                'user_id' => $user->id
             ]);
             $order->save();
             $order_details = $request->order_details;
@@ -53,6 +57,7 @@ class OrderController extends Controller
 
     public function createCreditorOrder(Request $request)
     {
+            $user = Auth::user();
             
                 //insert order details
             $order = Creditor_order::create([
@@ -61,6 +66,8 @@ class OrderController extends Controller
                 'order_number' => $request->order_number,
                 'invoice_number' => $request->invoice_number,
                 'status' => 2,
+                'user_id' => $user->id,
+                'notes' => $request->notes
             ]);
             $order->save();
             $order_details = $request->order_details;
@@ -77,7 +84,7 @@ class OrderController extends Controller
 
     public function getRequestedOrders(Request $request)
     {
-         $orders = Order::where('status','=', 2)->with('orderDetails')->paginate(10);
+         $orders = Order::where('status','=', 2)->orWhere('ready', 0)->with('orderDetails')->paginate(10);
          return response()->json($orders);
 
         //$getOrders = DB::table('Orders')->where('status', '=', 2)-with('orderDetails')->get();
@@ -85,7 +92,7 @@ class OrderController extends Controller
     }
     public function getLatestRequestedOrder(Request $request)
     {
-         $order = Order::where('status','=', 2)->with('orderDetails')->orderBy('id', 'desc')->first();
+         $order = Order::where('status','=', 2)->orWhere('ready', 0)->with('orderDetails')->orderBy('id', 'desc')->first();
          return response()->json($order);
 
         //$getOrders = DB::table('Orders')->where('status', '=', 2)-with('orderDetails')->get();
@@ -95,7 +102,7 @@ class OrderController extends Controller
 
     public function getRequestedCreditorOrders(Request $request)
     {
-         $orders = Creditor_order::where('status','=', 2)->with('orderDetails')->paginate(10);
+         $orders = Creditor_order::where('status','=', 2)->with('orderDetails', 'company')->paginate(10);
          return response()->json($orders);
 
         //$getOrders = DB::table('Orders')->where('status', '=', 2)-with('orderDetails')->get();
@@ -112,7 +119,7 @@ class OrderController extends Controller
 
     public function getReadyOrders(Request $request)
     {
-         $orders = Order::where('status', 3)->with('orderDetails')->paginate(10);
+         $orders = Order::where(['status' => 3, 'take_away_cleared' => 0])->with('orderDetails')->paginate(10);
          return response()->json($orders);
 
         //$getOrders = DB::table('Orders')->where('status', '=', 2)-with('orderDetails')->get();
@@ -121,7 +128,7 @@ class OrderController extends Controller
 
     public function getCreditorReadyOrders(Request $request)
     {
-         $orders = Creditor_order::where('status', 3)->with('orderDetails')->paginate(10);
+         $orders = Creditor_order::where('status', 3)->with('orderDetails', 'company')->paginate(10);
          return response()->json($orders);
 
         //$getOrders = DB::table('Orders')->where('status', '=', 2)-with('orderDetails')->get();
@@ -129,11 +136,28 @@ class OrderController extends Controller
     }
 
 
-    public function orderConfirmedByCook($order_id)
+    public function orderConfirmedByCook($order_id, $order_type)
+    {
+        if ($order_type == 'takeaway') {
+            return Order::where('id', $order_id)->update([
+                'ready' => 1,
+                'status' => 3,
+            ]);          
+        }
+        if ($order_type == 'table') {
+            return Order::where('id', $order_id)->update([
+                'ready' => 1,
+                'status' => 3
+            ]);          
+        }
+    }
+
+    public function clearTakeAwayOrder($order_id)
     {
         return Order::where('id', $order_id)->update([
             'ready' => 1,
-            'status' => 3
+            'take_away_cleared' => 1,
+            'status' => 1,
         ]);
     }
 
@@ -151,6 +175,8 @@ class OrderController extends Controller
 
     public function checkoutTakeAwayOrder(Request $request)
     {
+                $user = Auth::user();
+
                 //insert order details
                 DB::beginTransaction();
                 try {
@@ -165,6 +191,7 @@ class OrderController extends Controller
                     'order_type' => $request->order_type,
                     'order_number' => $request->order_number,
                     'status' => 1,
+                    'user_id' => $user->id,
                 ]);
                 $order->save();
                 $order_details = $request->order_details;

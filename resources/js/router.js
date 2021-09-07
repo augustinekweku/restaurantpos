@@ -3,6 +3,8 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 
+import creditorsReport from './pages/creditors-report.vue';
+import dashboard from './pages/dashboard.vue';
 import login from './pages/login.vue';
 import reports from './pages/reports.vue';
 import creditorReadyOrders from './pages/creditor-ready-orders.vue';
@@ -22,6 +24,16 @@ import roles from './pages/roles.vue';
 
 const routes = [
     //admin routes
+    {
+        path:  '/creditors-report',
+        component: creditorsReport,
+        name: 'creditorsReport'
+    },
+    {
+        path:  '/dashboard',
+        component: dashboard,
+        name: 'dashboard'
+    },
     {
         path:  '/login',
         component: login,

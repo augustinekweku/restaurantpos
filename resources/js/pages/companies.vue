@@ -1,9 +1,9 @@
 <template>
-    <div class=" container categories animate__animated animate__fadeIn">
+    <div class="my-3 container categories animate__animated animate__fadeIn">
         <h2 class="text-center">Companies</h2>
         <div class="d-flex justify-content-end ">
             <div class="add_button">
-                <Button @click="addModal = true">Add</Button>
+                <Button class="m-2 shadow" type="primary" @click="addModal = true">Add</Button>
             </div>
         </div>
 

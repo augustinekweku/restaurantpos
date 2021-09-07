@@ -1,5 +1,5 @@
 <template>
-    <div class="ready-orders_page container  animate__animated animate__fadeIn">
+    <div class="my-3 ready-orders_page container  animate__animated animate__fadeIn">
         <div class="row gx-5 gy-2">
             <h2 class="text-center mb-3">Ready Orders</h2>
         </div>
@@ -13,7 +13,7 @@
                                 <Card ref="cart" class="animate__animated animate__bounceIn">
                                     <Collapse>
                                         <Panel  name="1">
-                                           <span class="fw-bolder"> Order #{{order.order_number}} </span> for <span class="fw-bold" style="color:orangered"> {{order.table_name}}</span>
+                                           <span class="fw-bolder"> Order #{{order.order_number}} for {{order.company.company_name}}</span>
                                             <div slot="content" >
                                                 
                             <table class="table" id="printMe"  style="padding:0px !important">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Item;
 use App\Models\Role;
 use App\Models\User;
@@ -173,6 +174,8 @@ class AdminController extends Controller
             'price' => $request->price,
             'category_id' => $request->category_id,
             'image' => $request->image,
+            'stock' => $request->stock,
+            'qty_left' => $request->stock,
         ]);
     }
 
@@ -199,6 +202,30 @@ class AdminController extends Controller
             'category_id' => $request->category_id,
             'image' => $request->image,
         ]);
+    }
+
+    public function addStock(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+
+        $stock = $request->stock;
+        $quantity_added = $request->quantity;
+
+        $new_quantity_left = $request->qty_left + $quantity_added;
+        $new_stock = $request->stock + $quantity_added;
+
+
+        Item::where('id', $request->item_id)->update([
+            'stock' => $new_stock,
+            'qty_left' => $new_stock
+        ]);
+        DB::commit();
+
+    } catch  (Exception $e) {
+        DB::rollback();
+        return $e;
+    }
     }
 
     public function deleteItem(Request $request)

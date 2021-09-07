@@ -1,5 +1,5 @@
 <template>
-    <div class=" container categories animate__animated animate__fadeIn">
+    <div class=" my-3 container categories animate__animated animate__fadeIn">
         <h2 class="text-center">Roles</h2>
         <div class="d-flex justify-content-end ">
             <div class="add_button">

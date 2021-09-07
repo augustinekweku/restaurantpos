@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Middleware\adminCheck;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ReportsController;
@@ -18,13 +19,24 @@ use App\Http\Controllers\ReportsController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::prefix('app')->middleware(adminCheck::class)->group(function(){
+    Route::post('/create_user',[AdminController::class, 'createUser']);
+    Route::post('/delete_user',[AdminController::class, 'deleteUser']);
+    Route::post('/edit_user',[AdminController::class, 'editUser']);
+    Route::get('/get_users',[AdminController::class, 'getUsers']);
+    
+});
+
 Route::prefix('app')->group(function(){
 
 
 Route::post('/login',[AuthController::class, 'login']);
 
+Route::get('/get_cleared_creditor_date_range/{fromDate}/{toDate}',[ReportsController::class, 'getClearedCreditorDateRange']);
 Route::get('/get_date_range/{fromDate}/{toDate}',[ReportsController::class, 'getDateRange']);
 
+
+Route::get('/get_cleared_creditor_orders',[ReportsController::class, 'getClearedCreditorOrders']);
 Route::get('/get_cleared_orders',[ReportsController::class, 'getClearedOrders']);
 
 
@@ -42,13 +54,20 @@ Route::get('/get_requested_creditor_orders',[OrderController::class, 'getRequest
 Route::post('/create_creditor_order',[OrderController::class, 'createCreditorOrder']);
 
 
+Route::post('/clear_take_away_order/{order_id}',[OrderController::class, 'clearTakeAwayOrder']);
 Route::get('/get_latest_requested_order',[OrderController::class, 'getLatestRequestedOrder']);
 Route::post('/checkout_order',[OrderController::class, 'checkoutOrder']);
 Route::post('/checkout_take_away_order',[OrderController::class, 'checkoutTakeAwayOrder']);
 Route::get('/get_ready_orders',[OrderController::class, 'getReadyOrders']);
-Route::post('/order_confirmed_by_cook/{order_id}',[OrderController::class, 'orderConfirmedByCook']);
+Route::post('/order_confirmed_by_cook/{order_id}/{order_type}',[OrderController::class, 'orderConfirmedByCook']);
 Route::get('/get_requested_orders',[OrderController::class, 'getRequestedOrders']);
 Route::post('/create_order_details',[OrderController::class, 'createOrderDetails']);
+
+
+Route::post('/add_stock',[AdminController::class, 'addStock']);
+
+
+
 
 Route::get('/get_category_id/{category_id}',[AdminController::class, 'getCategoryId']);
 Route::get('/get_items_for_pos',[AdminController::class, 'getItemsForPos']);
@@ -67,10 +86,6 @@ Route::post('/create_category',[AdminController::class, 'createCategory']);
 Route::get('/get_categories',[AdminController::class, 'getCategories']);
 Route::post('/upload',[AdminController::class, 'upload']);
 Route::post('/delete_image',[AdminController::class, 'deleteImage']);
-Route::post('/create_user',[AdminController::class, 'createUser']);
-Route::post('/delete_user',[AdminController::class, 'deleteUser']);
-Route::post('/edit_user',[AdminController::class, 'editUser']);
-Route::get('/get_users',[AdminController::class, 'getUsers']);
 
 });
 

@@ -2,7 +2,7 @@
     <div class="admin-users animate__animated animate__fadeIn">
         <div class="d-flex justify-content-end ">
             <div class="add_button">
-                <Button @click="addModal = true">Add</Button>
+                <Button class="m-1 shadow" type="warning" @click="addModal = true">Add</Button>
             </div>
         </div>
 

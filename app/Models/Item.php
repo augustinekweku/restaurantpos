@@ -14,6 +14,8 @@ class Item extends Model
         'item_description',
         'image',
         'price',
-        'category_id'
+        'category_id',
+        'stock',
+        'qty_left'
     ];
 }

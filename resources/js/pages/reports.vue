@@ -1,5 +1,5 @@
 <template>
-    <div class="reports-page animate__animated animate__fadeIn mb-5">
+    <div class=" my-3 reports-page animate__animated animate__fadeIn mb-5">
             <h2 class="text-center mb-3">Reports</h2>
             <div>
                 <div class="searchDateRange text-center">
@@ -47,24 +47,20 @@ export default {
             showResults: false,
                 columns1: [
                 {
-                    label: "Type",
-                    field: "order_type"
-                },
-                {
                     label: "Invoice",
                     field: "invoice_number"
                 },
                 {
-                    label: "Table",
-                    field: "table_name"
+                    label: "Items",
+                    field: this.itemsFn,
+                    html: true
+
                 },
                 {
-                    label: "Order #",
-                    field: "order_number"
-                },
-                {
-                    label: "Amount",
-                    field: "order_total"
+                    label: "Issued by",
+                    field: this.user,
+                    html: true
+
                 },
                 {
                     label: "Paid",
@@ -74,10 +70,34 @@ export default {
                     label: "Balance",
                     field: "balance"
                 },
+                {
+                    label: "Amount",
+                    field: "order_total"
+                },
             ]
         }
     },
     methods: {
+        user(RowObj){
+            return RowObj.user.firstName
+        },
+        itemsFn(RowObj){
+            //return RowObj.order_details.length
+            let items = []
+            let reducedItems = []
+            if (RowObj.order_details.length > 2) {
+                for (let j = 0; j < 2; j++) {
+                    reducedItems.push(RowObj.order_details[j].item_name + ' X ' + RowObj.order_details[j].quantity)                 
+                }
+                return `<span style="font-size:13px !important">${reducedItems} ...</span>`
+            }else{
+                for (let i = 0; i < RowObj.order_details.length; i++) {
+                items.push(RowObj.order_details[i].item_name + ' X ' + RowObj.order_details[i].quantity)
+                return `<span style="font-size:13px !important">${items}</span>`
+                }
+                
+            }
+        },
         async filterDate(){
             if (this.fromDate.trim() == "")
                 return this.error("Beginning date is required");

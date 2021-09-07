@@ -17,12 +17,22 @@ class Creditor_order extends Model
         'paid',
         'balance',
         'invoice_number',
+        'notes',
         'status',
+        'user_id',
     ];
 
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class, 'creditor_order_id', 'id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
 }

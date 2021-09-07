@@ -1,12 +1,12 @@
 <template>
     <div class="table_page mx-3  m-2 animate__animated animate__fadeIn">
-        <Button @click="addModal=true" class="add_fab" size="large" icon="ios-add" shape="circle"></Button>
+        <Button @click="addModal=true" class="add_fab shadow" type="primary" size="large" icon="md-add" shape="circle"></Button>
             <h2 class="text-center mb-3">Tables</h2>
             <div class=" mt-4 row gy-2">
                 <div v-for="(table, i) in tables" :key="i"
                     class="col-sm-4 col-md-3 col-lg-2 col-xl-2 animate__animated animate__bounceIn">
                     <div>
-                            <Card style="">        
+                            <Card class="shadow">        
                                 <Button v-show="table.status==='empty'" slot="extra" :size="buttonSize" type="success"  shape="circle"> {{table.status}}</Button>
                                 <Button v-show="table.status==='occupied'" slot="extra" :size="buttonSize" type="error"  shape="circle"> {{table.status}}</Button>
                                 <Button v-show="table.status==='unpaid'" slot="extra" :size="buttonSize" type="warning"  shape="circle"> {{table.status}}</Button>

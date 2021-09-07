@@ -1,5 +1,5 @@
 <template>
-    <div class="orders_page container mx-3 animate__animated animate__fadeIn">
+    <div class="orders_page container mx-3 my-3 animate__animated animate__fadeIn">
         <div class="row gx-5 gy-2">
             <h2 class="text-center mb-3">Orders</h2>
             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -33,8 +33,12 @@
                                         <Panel class="text-center" name="1">
                                            <span class="fw-bolder"> Order # {{order.order_number}} </span> for <span class="fw-bold" style="color:orangered"> {{order.table_name}}</span>
                                             <div slot="content" class="px-4">
-                                                <div class="d-flex justify-content-between">
+                                                <div v-if="order.order_type == 'table'" class="d-flex justify-content-between">
                                                     <div>Served</div>
+                                                    <div><i-switch v-model="order.ready" @on-change="changeStatus(order, i)" /></div>
+                                                </div>
+                                                <div v-if="order.order_type == 'takeaway'" class="d-flex justify-content-between">
+                                                    <div>TakeAway Served</div>
                                                     <div><i-switch v-model="order.ready" @on-change="changeStatus(order, i)" /></div>
                                                 </div>
                                             </div>
@@ -100,7 +104,8 @@ export default {
             confirmButtonText: 'Yes, Meal is ready!'
             }).then((result) => {
             if (result.isConfirmed) {
-            axios.post(`/app/order_confirmed_by_cook/${order_id}`).then(({data})=>{
+            
+            axios.post(`/app/order_confirmed_by_cook/${order_id}/${order.order_type}`).then(({data})=>{
                 //console.log(data)
                     this.Orders.data.splice(i, 1)
                     this.$swal.fire(

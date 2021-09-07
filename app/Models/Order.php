@@ -21,6 +21,7 @@ class Order extends Model
         'invoice_number',
         'status',
         'order_type',
+        'user_id',
     ];
 
     public function orderDetails()
@@ -30,5 +31,9 @@ class Order extends Model
     public function table()
     {
         return $this->belongsTo(Table::class);
+    }
+    public function user()
+    {
+        return $this->hasOne(User::class);
     }
 }

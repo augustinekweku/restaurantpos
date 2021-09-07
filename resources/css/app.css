@@ -82,3 +82,27 @@
      .table_card .ivu-card-body {
         padding: 9px !important;
     }
+    .welcome-page, .dashboard-page{
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .container-fluid{
+        padding: 0 !important;
+    }
+    ._mini_main_layout {
+        margin-left: 75px !important;
+    }
+    ._main_layout {
+        padding-top: 60px !important;
+
+    }
+
+    .hero-text{
+        margin: auto ;
+    }
+    a{
+        text-decoration: none !important;
+    }
+    .ivu-tooltip-content, .ivu-tooltip-inner {
+        z-index: 99 !important;
+    }

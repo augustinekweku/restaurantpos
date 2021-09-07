@@ -1,11 +1,11 @@
 <template>
-<div>
-    <div class="container">
+<div class="login-page">
+    <div class="container login-block">
 
         <!--~~~~~~~ TABLE ONE ~~~~~~~~~-->
-        <div class="_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20 col-md-4">
+        <div class="login-card _1adminOverveiw_table_recent shadow _box_shadow _border_radious _mar_b30 _p20 col-md-4">
             <div class="login_header">
-                <h2>IdeaHub</h2>
+                <h2>SomeWhere</h2>
             </div>
             <div class="space">
             <Input type="email" v-model="data.email"  placeholder="Email" />                        
@@ -42,7 +42,7 @@ export default {
             const res = await this.callApi('post','app/login', this.data)
             if (res.status === 200) {
                 this.success(res.data.msg)
-                //window.location = '/'
+                window.location = '/'
             }else{
                 if (res.status === 401) {
                     this.error(res.data.msg)
@@ -64,12 +64,32 @@ export default {
 <style scoped>
 ._1adminOverveiw_table_recent {
     margin: 0 auto;
-    margin-top: 220px;
+    /* margin-top: 220px; */
+    /* border: 1px solid grey; */
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
 }
 .login_footer, .login_header {
     text-align: center;
 }
 .login_header{
     margin-bottom: 15px;
+}
+.login-page{
+    background-image:url('/svg/meal-background.svg');
+    background-repeat: repeat-y !important;
+    background-size: cover;
+    margin-top: -60px;
+    height: 100vh;
+    color: rgb(255, 255, 255);
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.login-block{
+    padding-top: 240px;
+}
+.login-card{
+    background: rgb(251, 251, 251);
+    color: #000;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="ready-orders_page container  animate__animated animate__fadeIn">
+    <div class="my-3 ready-orders_page container  animate__animated animate__fadeIn">
         <div class="row gx-5 gy-2">
             <h2 class="text-center mb-3">Ready Orders</h2>
         </div>
@@ -34,24 +34,27 @@
                                 <td>{{orderDetails.quantity}}</td>
                                 <td>{{orderDetails.amount}}</td>
                                 </tr>
-                                <tr>
+                                <tr v-if="order.order_type == 'table'">
                                     <th colspan="2"></th>
                                     <th class="text-end">Total: </th>
                                     <th  style="text-align:right" colspan="2">GH₵ {{order.order_total}}</th>
                                 </tr>
-                                <tr>
+                                <tr v-if="order.order_type == 'table'">
                                     <th colspan="1"></th>
                                     <th colspan="4"> <div class="d-flex align-items-center justify-content-end"><div>Paid: &nbsp; </div> <div> GH₵ </div> &nbsp; <div><InputNumber @on-change="calcBalance(order, i)"  :min="1" :step="0.5" v-model="order.paid"></InputNumber> </div> </div> </th>
                                 </tr>
-                                <tr>
+                                <tr v-if="order.order_type == 'table'">
                                     <th colspan="1"></th>
                                     <th colspan="4"> <div class="d-flex align-items-center justify-content-end"><div>Balance: &nbsp; </div> <div> GH₵ </div> &nbsp; <div><InputNumber v-model="order.balance" readonly></InputNumber></div> </div> </th>
                                 </tr>
                             </tbody>
                             </table>
-                                                <div class=" p-2 d-flex justify-content-between">
+                                                <div class=" p-2 d-flex justify-content-between" v-if="order.order_type == 'table'">
                                                     <div class="first pe-2"><Button @click="showPrintModal(order, i)"  type="success">Checkout</Button></div>
                                                     <div class="first pe-2"><Button  type="error">Cancel</Button></div>
+                                                </div>
+                                                <div class=" p-2 d-flex justify-content-between" v-if="order.order_type == 'takeaway'">
+                                                    <div class="first pe-2"><Button @click="ClearTakeAwayOrder(order, i)"  type="success">Clear</Button></div>
                                                 </div>
                                             </div>
                                         </Panel>
@@ -173,6 +176,19 @@ export default {
         this.list()
     },
     methods:{
+        async ClearTakeAwayOrder(order, i){
+            axios.post(`/app/clear_take_away_order/${order.id}`).then(({data})=>{
+                //console.log(data)
+                    this.Orders.data.splice(i, 1)
+                    this.$swal.fire(
+                    'Done!',
+                    'Order Successfully served',
+                    'success'
+                    )
+            }).catch(({ response })=>{
+                console.error(response)
+            })
+        },
         async checkout(){	
             if (!this.paid) {
                 return this.error("Paid field is empty")

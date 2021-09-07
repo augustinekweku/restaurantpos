@@ -1,9 +1,9 @@
 <template>
-    <div class="pos-page   animate__animated animate__fadeIn">
+    <div class="pos-page  my-3 animate__animated animate__fadeIn">
         <div class="row">
             <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                 <div class="one-third active-table-column mb-4">
-                    <div class="header p-2 mb-2 d-flex justify-content-between align-items-center">
+                    <div class="header py-1 px-2  mb-2 d-flex justify-content-between align-items-center">
                         <div><h5 class="fw-light">Active Table</h5></div>
                         <div>
                          <Select placeholder="Select Order type" v-model="order_type" width="40px">
@@ -76,8 +76,8 @@
                     </Card>
 
 
-                    <div class="header p-2 text-center mt-4 mb-2"><h5 class="fw-light">Latest Orders</h5></div>
-                        <Card shadow class="column-container p-2" style="background:white;">
+                    <div class="d-none header p-2 text-center mt-4 mb-2"><h5 class="fw-light">Latest Orders</h5></div>
+                        <Card shadow class=" d-none column-container p-2" style="background:white;">
                             <div v-if="latestOrder" class=" row gy-2">
                                     <div  class="">
                                     <div 
@@ -124,7 +124,7 @@
                 <div class="d-flex justify-content-around align-items-center p-2">
                     <div class="div">Sort By:</div>
                     <div class="div">
-                    <Select placeholder="Category">
+                    <Select not-found-text="No data found" placeholder="Category">
                     <Option
                         v-for="(c, i) in categories"
                         :value="c.id"
@@ -178,6 +178,7 @@
         <Modal
         v-model="printModal"
         :title="printModalTitle"
+        :closable="false"
         footer-hide>
         <div class="print-block" id="print-block">
         <div class="print-content">
@@ -233,9 +234,12 @@
         </div>
         </div>
 
-        <div class="button-footer d-flex justify-content-center">
+        <div class="button-footer d-flex justify-content-around">
             <div class="print-checkout-button">
                 <Button type="success" @click="checkout">Checkout and Print</Button>
+            </div>
+            <div class="cancel-button">
+                <Button type="error" @click="closeModal">Close</Button>
             </div>
         </div>
     </Modal>
@@ -316,7 +320,6 @@ export default {
             if (res.status == 200) {
                 this.success("Order succesfully checked out")
                 printJS({ printable:'print-block',css:'/css/print.css',  type:'html'})
-                this.getReadyOrders()
                 this.takeAwayOrder.balance = null
                 this.takeAwayOrder.paid= null
                 this.takeAwayOrder.randomNumber= null
@@ -348,7 +351,11 @@ export default {
                 this.printModalTitle = 'Order #' +  this.takeAwayOrder.receiptOrderNumber 
             },
         closeModal(){
-            this.orderModal = false
+            this.printModal = false
+            this.orderDetails = []
+            this.order_total= null
+            this.activeTableName = ""
+            this.activeTableID = null
         },
 
 

@@ -25,7 +25,6 @@
 ._footer_main{
 
     width: 100%;
-    margin-top: 25px;
   position: fixed;
   z-index: 999;
   bottom: 1px;

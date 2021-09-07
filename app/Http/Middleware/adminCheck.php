@@ -18,7 +18,7 @@ class adminCheck
     public function handle(Request $request, Closure $next)
     {
                         //Log::info('inside middleware');
-                        if ($request->path() == 'app/admin_login') {
+                        if ($request->path() == 'app/login') {
                             return $next($request);
                         }
                         if (!Auth::check()) {
@@ -29,9 +29,10 @@ class adminCheck
                         }
                         $user = Auth::user();
                         if ($user->userType !== 'admin') {
-                            return response()->json([
-                                'msg' => 'You are not allowed to access this route.',
-                            ], 403);
+                            // return response()->json([
+                            //     'msg' => 'You are not allowed to access this route.',
+                            // ], 403);
+                            return view('notfound');
                         }
                 return $next($request);
     }

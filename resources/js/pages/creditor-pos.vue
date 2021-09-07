@@ -13,7 +13,7 @@
                                 <h5 class="fw-light">Company : &nbsp;</h5> 
                                     </div>
                                     <div>
-                                <Select v-model="company_id" placeholder="Company">
+                                <Select not-found-text="No compaines created" v-model="company_id" placeholder="Company">
                                     <Option
                                         v-for="(c, i) in companies"
                                         :value="c.id"
@@ -153,7 +153,8 @@ export default {
                 company_id: this.company_id,
                 invoice_number: this.invoice,
                 order_total: this.order_total,
-                order_details: this.orderDetails
+                order_details: this.orderDetails,
+                notes: this.notes
             }
             console.log(creditorOrderForm)
             this.$Progress.start();

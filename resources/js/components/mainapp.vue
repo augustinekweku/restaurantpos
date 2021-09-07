@@ -61,6 +61,7 @@
 
                         <!-- NOTIFICATIONS AND MESSAGES ON THE TOP BAR RIGHT -->
                         <div class="_navbar_right">
+                            <div>Hiya, {{ userSession.firstName}}</div>
                             <ul class="_navbar_right_list">
                                 <li
                                     class="_mosearch d-none"
@@ -382,6 +383,18 @@
                                         > Creditor Ready Orders</span
                                     >
                                 </MenuItem>
+                                <MenuItem
+                                    to="/creditors-report"
+                                    name="creditors-report"
+                                    style="color:#7a4a59 !important"
+                                    v-if="$store.state.user.userType === 'admin' ||
+                                $store.state.user.userType === 'waiter'"
+                                >
+                                    <Icon type="ios-alarm" style="color:#7a4a59 !important" />
+                                    <span class="submenu_text"
+                                        > Creditors Report</span
+                                    >
+                                </MenuItem>
 
                                 </Submenu>
 
@@ -443,6 +456,7 @@
                 ]"
             >
                 <div class="container-fluid">
+                <Welcome v-if="$route.path == '/'"/>
                 <router-view></router-view>
                 </div>
                 <Footer
@@ -461,14 +475,17 @@
 
 <script>
 import Footer from "./footer.vue";
+import Welcome from "./welcome.vue";
 export default {
     props: ['user'],
     components: {
         Footer,
+        Welcome
     },
 
     data() {
         return {
+            userSession: [],
             activeRoute: "index",
             sidebar: false,
             isHovering: false,
@@ -501,7 +518,9 @@ export default {
     created() {
         this.$store.commit('setUpdateUser', this.user)
         console.log("state",this.$store.state.user)
+        console.log(this.$route.path)
         this.activeRoute = this.$route.name;
+        this.userSession = this.$store.state.user
 
     }
 };

@@ -2,7 +2,7 @@
     <div class="categories animate__animated animate__fadeIn">
         <div class="d-flex justify-content-end ">
             <div class="add_button">
-                <Button @click="addModal = true">Add</Button>
+                <Button class="m-2 shadow" type="warning" @click="addModal = true">Add</Button>
             </div>
         </div>
 
@@ -28,7 +28,7 @@
                 <Input
                     type="text"
                     v-model="form.category_name"
-                    placeholder="First Name"
+                    placeholder="Category Name"
                 />
             </div>
             <div class="space">

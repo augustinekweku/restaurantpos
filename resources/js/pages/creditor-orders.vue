@@ -1,5 +1,5 @@
 <template>
-    <div class="orders_page container mx-3 animate__animated animate__fadeIn">
+    <div class="my-3 orders_page container mx-3 animate__animated animate__fadeIn">
         <div class="row gx-5 gy-2">
             <h2 class="text-center mb-3">Orders</h2>
             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -31,11 +31,15 @@
                                 <Card class="animate__animated animate__bounceIn">
                                     <Collapse>
                                         <Panel class="text-center" name="1">
-                                           <span class="fw-bolder"> Order # {{order.order_number}} </span> for <span class="fw-bold" style="color:orangered"> {{order.table_name}}</span>
+                                           <span class="fw-bolder"> Order # {{order.order_number}} </span>
                                             <div slot="content" class="px-4">
                                                 <div class="d-flex justify-content-between">
                                                     <div>Served</div>
                                                     <div><i-switch v-model="order.ready" @on-change="changeStatus(order, i)" /></div>
+                                                </div>
+                                                <div class="my-1">
+                                                    <p>By {{order.company.company_name}}</p>
+                                                    <p>{{order.company.about}}</p>
                                                 </div>
                                             </div>
                                         </Panel>
