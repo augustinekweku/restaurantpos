@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Creditor_order;
+use App\Models\Items_inventory;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,7 @@ class ReportsController extends Controller
     public function getDateRange(Request $request, $fromDate, $toDate) 
     {
         //return $fromDate;
-        $getDateData = Order::whereBetween('created_at', [$fromDate, $toDate])->where('status', '=', 1)->with('user', 'orderDetails', 'company')->get();
+        $getDateData = Order::whereBetween('created_at', [$fromDate, $toDate])->where('status', '=', 1)->with('user', 'orderDetails')->get();
         $total = Order::whereBetween('created_at', [$fromDate, $toDate])->where('status', '=', 1)->sum('order_total');
         return response()->json(['total' => $total,
                                 'getDateData' => $getDateData]);
@@ -38,5 +39,9 @@ class ReportsController extends Controller
         return response()->json(['total' => $total,
                                 'getDateData' => $getDateData]);
     
+    }
+    public function getInventoryRecords()
+    {
+        return Items_inventory::with('user', 'item')->orderBy('id', 'desc')->get();
     }
 }

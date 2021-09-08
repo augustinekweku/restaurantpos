@@ -9,7 +9,9 @@ use App\Models\User;
 use App\Models\Table;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\Items_inventory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -208,20 +210,31 @@ class AdminController extends Controller
     {
         DB::beginTransaction();
         try {
-
+        // return $request;
         $stock = $request->stock;
         $quantity_added = $request->quantity;
 
-        $new_quantity_left = $request->qty_left + $quantity_added;
+        $new_quantity_left = $request->old_qty_left + $quantity_added;
         $new_stock = $request->stock + $quantity_added;
+        
 
-
-        Item::where('id', $request->item_id)->update([
+        $item_stock = Item::where('id', $request->item_id)->update([
             'stock' => $new_stock,
-            'qty_left' => $new_stock
+            'qty_left' => $new_quantity_left
+        ]);
+        $user = Auth::user();
+        Items_inventory::create([
+            'old_qty' => $request->old_qty_left,
+            'qty_added' => $quantity_added,
+            'new_qty_left' => $new_quantity_left,
+            'old_stock' => $request->stock,
+            'new_stock' => $new_stock,
+            'date' => date('Y/m/d'),
+            'item_id' => $request->item_id,
+            'user_id' => $user->id,
         ]);
         DB::commit();
-
+        return response()->json(['new_stock' => $new_stock, 'new_qty_left' => $new_quantity_left]);
     } catch  (Exception $e) {
         DB::rollback();
         return $e;
@@ -281,7 +294,7 @@ class AdminController extends Controller
     }
     public function getItemsForPos()
     {
-        return Item::orderBy('id', 'desc')->get();
+        return Item::where('qty_left', '>' , 1)->orderBy('id', 'desc')->get();
     }
     public function getCategoryId($category_id)
     {

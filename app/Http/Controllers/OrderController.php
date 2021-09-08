@@ -8,6 +8,7 @@ use App\Models\Table;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Models\Creditor_order;
+use App\Models\Item;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -76,6 +77,7 @@ class OrderController extends Controller
                 array_push($orderDetails, ['item_id' => $x['item_id'], 'item_name' => $x['item_name'],
                 'creditor_order_id' => $order->id, 'price' =>$x['price'], 'quantity'=> $x['quantity'], 'amount' => $x['amount']]);
                 //echo json_encode($x['item_name']);
+
             }
                 OrderDetail::insert($orderDetails);
                 DB::commit();
@@ -200,6 +202,12 @@ class OrderController extends Controller
                     array_push($orderDetails, ['item_id' => $x['item_id'], 'item_name' => $x['item_name'],
                     'order_id' => $order->id, 'price' =>$x['price'], 'quantity'=> $x['quantity'], 'amount' => $x['amount']]);
                     //echo json_encode($x['item_name']);
+                    $getItemQtyLeft = DB::table('Items')->where('id', '=', $x['item_id'])->get('qty_left');
+                    $old_qty = $getItemQtyLeft[0]->qty_left;
+                    $new_qty_left = $old_qty - $x['quantity'];
+                    Item::where('id', $x['item_id'])->update([
+                        'qty_left' => $new_qty_left
+                    ]);
                 }
                 OrderDetail::insert($orderDetails);
                     //$updateTable->save();

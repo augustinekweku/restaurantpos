@@ -50,6 +50,7 @@
                                             >
                                             </div>
                                             <p class="item-card__description"> <b> Stock:</b> {{item.stock}}</p>
+                                            <p class="item-card__description"> <b> Qty left:</b> {{item.qty_left}}</p>
 
                                             <div
                                                 class="item-card__footer px-3 py-2 d-flex justify-content-between"
@@ -352,6 +353,7 @@ export default {
             items:{},
             addModal:false,
             AddStockModal: false,
+            itemStockIndex: -1,
             addStockObj:{
                 item_id: null,
                 item_name: "",
@@ -396,18 +398,27 @@ export default {
                 item_id: item.id,
                 item_name: item.item_name,
                 stock: item.stock,
-                qty_left: item.qty_left
+                old_qty_left: item.qty_left
             }
             this.addStockObj = obj
+            this.itemStockIndex = i
         },
         async addStock(){
             if (!this.addStockObj.quantity)
                 return this.error("Quantity is required");
+            this.addStockObj.quantity = parseInt(this.addStockObj.quantity)
             const res = await this.callApi(
                 "post",
                 "app/add_stock",
                 this.addStockObj
-            );        
+            )
+            if (res.status == 200) {
+                console.log(res)
+                this.AddStockModal = false
+                this.items.data[this.itemStockIndex].stock = res.data.new_stock
+                this.items.data[this.itemStockIndex].qty_left = res.data.new_qty_left
+                this.success("Stock updated successfully")
+            }        
         },
         closeStockModal(){
             this.AddStockModal = false

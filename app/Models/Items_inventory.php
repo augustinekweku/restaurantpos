@@ -11,9 +11,21 @@ class Items_inventory extends Model
     protected $fillable = [
         'old_qty',
         'old_stock',
-        'new_qty',
+        'new_qty_left',
+        'qty_added',
         'new_stock',
         'date',
         'item_id',
+        'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
 }

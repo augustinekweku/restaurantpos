@@ -33,7 +33,7 @@
                                 <th scope="row">{{i+1}}</th>
                                 <td>{{orderDetail.item_name}}</td>
                                 <td>{{orderDetail.price}}</td>
-                                <td><input type="number" @keyup="calcAmount(orderDetail, i)" @change="calcAmount(orderDetail, i)" v-model="orderDetail.quantity" style="width:100px; border:solid 1px grey; padding:2px;"></td>
+                                <td><input type="number" @keyup="calcAmount(orderDetail, i)" :max="orderDetail.qty_left" @change="calcAmount(orderDetail, i)" v-model="orderDetail.quantity" style="width:100px; border:solid 1px grey; padding:2px;"></td>
                                 <td>{{orderDetail.amount}}</td>
                                 <td><Icon @click="removeItem(orderDetail, i)" style="cursor:pointer" type="md-close" color="red" /></td>
                                 </tr>
@@ -286,11 +286,23 @@ export default {
                 {
                     label: "Price",
                     field: "price"
+                },
+                {
+                    label: "Qty left",
+                    field: this.qtyLeftFn,
+                    html: true
                 }
             ],
         }
     },
     methods:{
+        qtyLeftFn(RowObj){
+            if (RowObj.qty_left < 5) {
+                return `<span style="color:red;">${RowObj.qty_left}</spam>`
+            }else{
+                return RowObj.qty_left
+            }
+        },
         async checkout(){	
             if (!this.takeAwayOrder.paid) {
                 return this.error("Paid field is empty")
@@ -413,8 +425,14 @@ export default {
 
         },
         calcAmount(orderDetail, i){
-          this.orderDetails[i].amount = this.orderDetails[i].price * this.orderDetails[i].quantity
-          this.calcOrderTotal()
+            if (this.orderDetails[i].quantity > orderDetail.qty_left) {
+                this.orderDetails[i].quantity = 0
+                this.error("Quantity entered is more than quantity left")
+                this.orderDetails[i].amount = this.orderDetails[i].price * this.orderDetails[i].quantity
+                return this.calcOrderTotal()
+            }
+            this.orderDetails[i].amount = this.orderDetails[i].price * this.orderDetails[i].quantity
+            this.calcOrderTotal()
         },
             onRowDoubleClick(params) {
             // params.row - row object
@@ -429,7 +447,8 @@ export default {
                         price: parseFloat(params.row.price),
                         amount: parseFloat(params.row.price),
                         quantity: 1,
-                        order_id: null
+                        order_id: null,
+                        qty_left:params.row.qty_left
                     }
                     const isItemClicked = this.orderDetails.find((item) => item.item_id === params.row.id)
                     if (isItemClicked) {

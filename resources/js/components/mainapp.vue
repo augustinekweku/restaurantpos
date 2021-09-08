@@ -293,6 +293,12 @@
                                     <span class="submenu_text">Items</span>
                                 </MenuItem>
                                 <MenuItem v-if="$store.state.user.userType === 'cook' ||
+                                $store.state.user.userType === 'admin'" 
+                                to="/items-inventory-records" name="items-inventory">
+                                    <Icon type="md-archive" style="color:brown !important"/>
+                                    <span class="submenu_text">Inventory Records</span>
+                                </MenuItem>
+                                <MenuItem v-if="$store.state.user.userType === 'cook' ||
                                 $store.state.user.userType === 'admin'" to="/categories" name="categories">
                                     <Icon type="md-apps" />
                                     <span class="submenu_text">Categories</span>

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 
+import inventoryRecords from './pages/items-inventory-records.vue';
 import creditorsReport from './pages/creditors-report.vue';
 import dashboard from './pages/dashboard.vue';
 import login from './pages/login.vue';
@@ -24,6 +25,11 @@ import roles from './pages/roles.vue';
 
 const routes = [
     //admin routes
+    {
+        path:  '/items-inventory-records',
+        component: inventoryRecords,
+        name: 'inventoryRecords'
+    },
     {
         path:  '/creditors-report',
         component: creditorsReport,

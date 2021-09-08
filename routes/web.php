@@ -30,6 +30,10 @@ Route::prefix('app')->middleware(adminCheck::class)->group(function(){
 Route::prefix('app')->group(function(){
 
 
+
+Route::get('/get_inventory_records',[ReportsController::class, 'getInventoryRecords']);
+
+
 Route::post('/login',[AuthController::class, 'login']);
 
 Route::get('/get_cleared_creditor_date_range/{fromDate}/{toDate}',[ReportsController::class, 'getClearedCreditorDateRange']);
