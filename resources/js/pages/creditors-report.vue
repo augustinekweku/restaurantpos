@@ -1,6 +1,6 @@
 <template>
     <div class="-page animate__animated animate__fadeIn mb-5">
-            <h2 class="text-center mb-3">Reports</h2>
+            <h2 class="text-center mb-3">Credit Reports</h2>
             <div>
                 <div class="searchDateRange text-center">
                     <div>
@@ -21,7 +21,6 @@
                     :columns="columns1"
                     :rows="reports"
                     :line-numbers="true"
-                    :search-options="{ enabled: true }"
                     :pagination-options="{
                             enabled: true
                         }"
@@ -70,15 +69,19 @@ export default {
                 },
                 {
                     label: "Paid",
-                    field: "paid"
+                    field: "paid",
+                    sortable: false,
                 },
                 {
                     label: "Balance",
-                    field: "balance"
+                    field: "balance",
+                    sortable: false,
                 },
                 {
                     label: "Amount",
-                    field: "order_total"
+                    field: "order_total",
+                    sortable: false,
+
                 },
             ]
         }

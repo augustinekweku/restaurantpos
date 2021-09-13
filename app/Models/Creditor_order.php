@@ -20,6 +20,7 @@ class Creditor_order extends Model
         'notes',
         'status',
         'user_id',
+        'due_date',
     ];
 
     public function orderDetails()

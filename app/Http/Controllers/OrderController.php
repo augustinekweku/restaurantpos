@@ -25,6 +25,8 @@ class OrderController extends Controller
                 //     'quantity' => 'required',
                 //     'amount' => 'required',
                 // ]);
+                DB::beginTransaction();
+                try {
             $user = Auth::user();
             
             
@@ -46,6 +48,14 @@ class OrderController extends Controller
                 array_push($orderDetails, ['item_id' => $x['item_id'], 'item_name' => $x['item_name'],
                 'order_id' => $order->id, 'price' =>$x['price'], 'quantity'=> $x['quantity'], 'amount' => $x['amount']]);
                 //echo json_encode($x['item_name']);
+
+                //update the quantity left
+                $getItemQtyLeft = DB::table('Items')->where('id', '=', $x['item_id'])->get('qty_left');
+                $old_qty = $getItemQtyLeft[0]->qty_left;
+                $new_qty_left = $old_qty - $x['quantity'];
+                Item::where('id', $x['item_id'])->update([
+                    'qty_left' => $new_qty_left
+                ]);
             }
                 OrderDetail::insert($orderDetails);
                 Table::where('id', $request->table_id)->update([
@@ -53,6 +63,10 @@ class OrderController extends Controller
                 ]);
                 //$updateTable->save();
                 DB::commit();
+            } catch  (Exception $e) {
+                DB::rollback();
+                return $e;
+            }
 
     }
 
@@ -68,7 +82,8 @@ class OrderController extends Controller
                 'invoice_number' => $request->invoice_number,
                 'status' => 2,
                 'user_id' => $user->id,
-                'notes' => $request->notes
+                'notes' => $request->notes,
+                'due_date' => $request->due_date
             ]);
             $order->save();
             $order_details = $request->order_details;
@@ -165,14 +180,22 @@ class OrderController extends Controller
 
     public function checkoutOrder(Request $request)
     {
-        Order::where('id', $request->id)->update([
+        DB::beginTransaction();
+        try {
+        $order =Order::where('id', $request->id)->update([
             'status' => $request->status,
             'balance' => $request->balance,
             'paid' => $request->paid,
         ]);
-        return Table::where('id', $request->table_id)->update([
+        Table::where('id', $request->table_id)->update([
             'status' => 3
         ]);
+        DB::commit();
+    } catch  (Exception $e) {
+        DB::rollback();
+        return $e;
+    }
+        
     }
 
     public function checkoutTakeAwayOrder(Request $request)
@@ -202,6 +225,8 @@ class OrderController extends Controller
                     array_push($orderDetails, ['item_id' => $x['item_id'], 'item_name' => $x['item_name'],
                     'order_id' => $order->id, 'price' =>$x['price'], 'quantity'=> $x['quantity'], 'amount' => $x['amount']]);
                     //echo json_encode($x['item_name']);
+
+                    //update the quantity left
                     $getItemQtyLeft = DB::table('Items')->where('id', '=', $x['item_id'])->get('qty_left');
                     $old_qty = $getItemQtyLeft[0]->qty_left;
                     $new_qty_left = $old_qty - $x['quantity'];

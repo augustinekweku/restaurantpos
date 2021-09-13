@@ -208,10 +208,11 @@ export default {
                 "app/checkout_order",
                 obj
             );
-            if (res.data == 1) {
+            console.log(res);
+            if (res.status == 200) {
                 this.success("Order succesfully checked out")
-                printJS({ printable:'print-block',css:'/css/print.css',  type:'html'})
                 this.getReadyOrders()
+                printJS({ printable:'print-block',css:'/css/print.css',  type:'html'})
             }
         },
 

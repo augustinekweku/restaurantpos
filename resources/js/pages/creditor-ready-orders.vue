@@ -1,7 +1,7 @@
 <template>
     <div class="my-3 ready-orders_page container  animate__animated animate__fadeIn">
         <div class="row gx-5 gy-2">
-            <h2 class="text-center mb-3">Ready Orders</h2>
+            <h2 class="text-center mb-3">Orders pending Payment </h2>
         </div>
         <div v-if="Orders.data" >
                 <div v-if="Orders.data.length" class="mt-4 row gy-2">

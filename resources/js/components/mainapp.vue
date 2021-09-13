@@ -61,7 +61,10 @@
 
                         <!-- NOTIFICATIONS AND MESSAGES ON THE TOP BAR RIGHT -->
                         <div class="_navbar_right">
+                            <div class="d-flex justify-content-end">
                             <div>Hiya, {{ userSession.firstName}}</div>
+
+                            </div>
                             <ul class="_navbar_right_list">
                                 <li
                                     class="_mosearch d-none"
@@ -274,7 +277,25 @@
                                 >
                                     <Icon type="md-alarm" style="color:green !important" />
                                     <span class="submenu_text"
-                                        > Ready Orders</span
+                                        > Ready Orders    <Tag v-if="readyOrdersCount" color="error">{{readyOrdersCount}}</Tag></span
+                                    >
+                                </MenuItem>
+                                </Submenu>
+
+                                <Submenu v-if="$store.state.user.userType === 'cook' ||
+                                $store.state.user.userType === 'admin'"
+                                name="cook">
+                                <template slot="title">
+                                    <Icon type="md-person" />
+                                    <span class="submenu_text">Chef</span>
+                                </template>
+                                <MenuItem
+                                    to="/orders"
+                                    name="orders"
+                                >
+                                    <Icon type="md-clock" style="color:#2d8a99 !important" />
+                                    <span class="submenu_text"
+                                        > Orders <Tag v-if="orderNotificationsCount>0" color="error">{{orderNotificationsCount}}</Tag></span
                                     >
                                 </MenuItem>
                                 </Submenu>
@@ -304,22 +325,60 @@
                                     <span class="submenu_text">Categories</span>
                                 </MenuItem>
 
-                                <Submenu v-if="$store.state.user.userType === 'cook' ||
-                                $store.state.user.userType === 'admin'"
-                                name="cook">
+                                <Submenu name="credit">
                                 <template slot="title">
-                                    <Icon type="md-person" />
-                                    <span class="submenu_text">Chef</span>
+                                    <Icon type="md-card" style="color:#7a4a59 !important" />
+                                    <span class="submenu_text" style="color:#7a4a59 !important">Credit</span>
                                 </template>
                                 <MenuItem
-                                    to="/orders"
-                                    name="orders"
+                                    to="/creditor-pos"
+                                    name="creditor-pos"
+                                    style="color:#7a4a59 !important" 
+                                    v-if="$store.state.user.userType === 'admin'
+                                    || $store.state.user.userType === 'waiter'"
                                 >
-                                    <Icon type="md-clock" style="color:#2d8a99 !important" />
+                                    <Icon type="ios-card" style="color:#7a4a59 !important" />
                                     <span class="submenu_text"
-                                        > Orders</span
+                                        > Creditor POS</span
                                     >
                                 </MenuItem>
+                                <MenuItem 
+                                    to="/creditor-orders"
+                                    name="creditor-orders"
+                                    style="color:#7a4a59 !important"
+                                    v-if="$store.state.user.userType === 'admin' ||
+                                $store.state.user.userType === 'cook'"
+                                >
+                                    <Icon type="ios-clock" style="color:#7a4a59 !important" />
+                                    <span class="submenu_text"
+                                        >Orders on Credit</span
+                                    >
+                                </MenuItem>
+                                <MenuItem
+                                    to="/creditor-ready-orders"
+                                    name="creditor-ready-orders"
+                                    style="color:#7a4a59 !important"
+                                    v-if="$store.state.user.userType === 'admin' ||
+                                $store.state.user.userType === 'waiter'"
+                                >
+                                    <Icon type="ios-alarm" style="color:#7a4a59 !important" />
+                                    <span class="submenu_text"
+                                        >Orders pending payment</span
+                                    >
+                                </MenuItem>
+                                <MenuItem
+                                    to="/creditors-report"
+                                    name="creditors-report"
+                                    style="color:#7a4a59 !important"
+                                    v-if="$store.state.user.userType === 'admin' ||
+                                $store.state.user.userType === 'waiter'"
+                                >
+                                    <Icon type="md-analytics" style="color:#7a4a59 !important" />
+                                    <span class="submenu_text"
+                                        > Report</span
+                                    >
+                                </MenuItem>
+
                                 </Submenu>
 
 
@@ -347,62 +406,6 @@
                                     <Icon type="md-restaurant" style="color:green !important"/>
                                     <span class="submenu_text">Tables</span>
                                 </MenuItem>
-
-                                <Submenu name="credit">
-                                <template slot="title">
-                                    <Icon type="md-card" style="color:#7a4a59 !important" />
-                                    <span class="submenu_text" style="color:#7a4a59 !important">Credit</span>
-                                </template>
-                                <MenuItem
-                                    to="/creditor-pos"
-                                    name="creditor-pos"
-                                    style="color:#7a4a59 !important" 
-                                    v-if="$store.state.user.userType === 'admin'
-                                    || $store.state.user.userType === 'waiter'"
-                                >
-                                    <Icon type="ios-card" style="color:#7a4a59 !important" />
-                                    <span class="submenu_text"
-                                        > Creditor POS</span
-                                    >
-                                </MenuItem>
-                                <MenuItem 
-                                    to="/creditor-orders"
-                                    name="creditor-orders"
-                                    style="color:#7a4a59 !important"
-                                    v-if="$store.state.user.userType === 'admin' ||
-                                $store.state.user.userType === 'cook'"
-                                >
-                                    <Icon type="ios-clock" style="color:#7a4a59 !important" />
-                                    <span class="submenu_text"
-                                        > Creditor Orders</span
-                                    >
-                                </MenuItem>
-                                <MenuItem
-                                    to="/creditor-ready-orders"
-                                    name="creditor-ready-orders"
-                                    style="color:#7a4a59 !important"
-                                    v-if="$store.state.user.userType === 'admin' ||
-                                $store.state.user.userType === 'waiter'"
-                                >
-                                    <Icon type="ios-alarm" style="color:#7a4a59 !important" />
-                                    <span class="submenu_text"
-                                        > Creditor Ready Orders</span
-                                    >
-                                </MenuItem>
-                                <MenuItem
-                                    to="/creditors-report"
-                                    name="creditors-report"
-                                    style="color:#7a4a59 !important"
-                                    v-if="$store.state.user.userType === 'admin' ||
-                                $store.state.user.userType === 'waiter'"
-                                >
-                                    <Icon type="ios-alarm" style="color:#7a4a59 !important" />
-                                    <span class="submenu_text"
-                                        > Creditors Report</span
-                                    >
-                                </MenuItem>
-
-                                </Submenu>
 
 
                             </MenuGroup>
@@ -491,6 +494,8 @@ export default {
 
     data() {
         return {
+            orderNotificationsCount: 0,
+            readyOrdersCount: 0,
             userSession: [],
             activeRoute: "index",
             sidebar: false,
@@ -505,6 +510,24 @@ export default {
     },
 
     methods: {
+        async getRequestedOrdersCount(){
+            const getOrdersCount = await this.callApi(
+                "get",
+                `app/get_requested_orders_count/${this.orderNotificationsCount}`
+            );
+            if (getOrdersCount.data !== this.orderNotificationsCount) {
+                this.orderNotificationsCount = getOrdersCount.data
+            }
+        },
+        async getReadyOrdersCount(){
+            const getOrdersCount = await this.callApi(
+                "get",
+                "app/get_ready_orders_count"
+            );
+            if (getOrdersCount.status == 200) {
+                this.readyOrdersCount = getOrdersCount.data
+            }
+        },
         async logout() {
             const logout = await this.callApi("get", "/logout");
         },
@@ -527,6 +550,8 @@ export default {
         console.log(this.$route.path)
         this.activeRoute = this.$route.name;
         this.userSession = this.$store.state.user
+        //setInterval(this.getRequestedOrdersCount, 2000)
+        //setInterval( this.getReadyOrdersCount ,2000)
 
     }
 };

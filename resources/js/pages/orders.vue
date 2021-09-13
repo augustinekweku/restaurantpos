@@ -35,11 +35,11 @@
                                             <div slot="content" class="px-4">
                                                 <div v-if="order.order_type == 'table'" class="d-flex justify-content-between">
                                                     <div>Served</div>
-                                                    <div><i-switch v-model="order.ready" @on-change="changeStatus(order, i)" /></div>
+                                                    <div> <Button type="success" @click="changeStatus(order, i)">Serve</Button> </div>
                                                 </div>
                                                 <div v-if="order.order_type == 'takeaway'" class="d-flex justify-content-between">
                                                     <div>TakeAway Served</div>
-                                                    <div><i-switch v-model="order.ready" @on-change="changeStatus(order, i)" /></div>
+                                                    <div><Button type="success" @click="changeStatus(order, i)">Serve</Button></div>
                                                 </div>
                                             </div>
                                         </Panel>

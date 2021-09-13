@@ -60,6 +60,10 @@
                                 <div class="col-sm-3 text-end" style="margin:auto"><h5 class="fw-light">Notes: </h5> </div>
                                 <div class="col-sm-9 "><Input v-model="notes" type="textarea"/></div>
                             </div>
+                            <div class="row my-2 pb-2">
+                                <div class="col-sm-3 text-end" style="margin:auto"><h5 class="fw-light">Due date: </h5> </div>
+                                <div class="col-sm-9 "><Input v-model="due_date" type="date"/></div>
+                            </div>
                             <div class="d-flex justify-content-between">
                                 <div class="first pe-2"><Button @click="processOrder(orderDetails, i)" type="primary">Process</Button></div>
                                 <div class="first pe-2"><Button @click="cancelOrder" type="error">Cancel</Button></div>
@@ -118,6 +122,7 @@ export default {
             companies:[],
             invoice: null,
             notes: "",
+            due_date: "",
             order_total: null,
             orderDetails:[],
             categories: [],
@@ -142,8 +147,10 @@ export default {
             let randomNumber = Math.floor((Math.random() * 1000) + 1)
             if (this.notes.trim() == "")
                 return this.error("Notes field is required");
+            if (this.due_date.trim() == "")
+                return this.error("Due date field is required");
             if (!this.company_id) {
-                return this.error("Company id is required")
+                return this.error("Choose Company")
             }
             if (!this.orderDetails.length) {
                 return this.error("Cart is empty")
@@ -154,7 +161,8 @@ export default {
                 invoice_number: this.invoice,
                 order_total: this.order_total,
                 order_details: this.orderDetails,
-                notes: this.notes
+                notes: this.notes,
+                due_date: this.due_date
             }
             console.log(creditorOrderForm)
             this.$Progress.start();
@@ -170,6 +178,7 @@ export default {
                 this.order_total= null
                 this.company_name = ""
                 this.notes = ""
+                this.due_date = ""
                 this.company_id = null
             }
         },

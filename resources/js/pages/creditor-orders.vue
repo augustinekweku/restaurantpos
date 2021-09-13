@@ -21,8 +21,8 @@
                 </Button>
             </div>
         </div>
-        <div v-if="Orders.data" class=" mt-4 row gy-2">
-                <div v-if="Orders.data.length" class="">
+        <div v-if="Orders.data" class=" mt-4 gy-2">
+                <div v-if="Orders.data.length" class="row">
                 <div v-for="(order, i) in Orders.data" :key="i"
                     class="mb-4 col-sm-12 col-md-6 col-lg-3 col-xl-3 animate__animated animate__bounceIn">
                             <div class>
@@ -31,11 +31,13 @@
                                 <Card class="animate__animated animate__bounceIn">
                                     <Collapse>
                                         <Panel class="text-center" name="1">
-                                           <span class="fw-bolder"> Order # {{order.order_number}} </span>
+                                           <span class="fw-bold">  Due: <span style="color:red;">{{order.due_date}}</span> </span>
                                             <div slot="content" class="px-4">
                                                 <div class="d-flex justify-content-between">
-                                                    <div>Served</div>
-                                                    <div><i-switch v-model="order.ready" @on-change="changeStatus(order, i)" /></div>
+                                                    <div> Order # {{order.order_number}}</div>
+                                                    <div>
+                                                    <Button size="small" type="primary" @click="changeStatus(order, i)">Serve</Button>
+                                                    </div>
                                                 </div>
                                                 <div class="my-1">
                                                     <p>By {{order.company.company_name}}</p>

@@ -336,6 +336,7 @@ export default {
                 this.takeAwayOrder.paid= null
                 this.takeAwayOrder.randomNumber= null
                 this.generateInvoice()
+                this.getItemsForPos()
             }
         },
 
@@ -410,6 +411,7 @@ export default {
                 this.activeTableName = ""
                 this.activeTableID = null,
                 this.order_type = ""
+                this.getItemsForPos()
             }
         },
         cancelOrder(){

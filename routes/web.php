@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ReportsController;
 
 /*
@@ -31,15 +32,23 @@ Route::prefix('app')->group(function(){
 
 
 
-Route::get('/get_inventory_records',[ReportsController::class, 'getInventoryRecords']);
+Route::get('/get_ready_orders_count',[NotificationsController::class, 'getReadyOrdersCount']);
+Route::get('/get_requested_orders_count/{old_count}',[NotificationsController::class, 'getRequestedOrdersCount']);
 
+Route::get('/get_inventory_records',[ReportsController::class, 'getInventoryRecords']);
 
 Route::post('/login',[AuthController::class, 'login']);
 
+
 Route::get('/get_cleared_creditor_date_range/{fromDate}/{toDate}',[ReportsController::class, 'getClearedCreditorDateRange']);
 Route::get('/get_date_range/{fromDate}/{toDate}',[ReportsController::class, 'getDateRange']);
+Route::get('/get_date_range_for_item/{fromDate}/{toDate}/{item_id}',[ReportsController::class, 'getDateRangeForItem']);
 
 
+Route::get('/get_all_items',[ReportsController::class, 'getAllItems']);
+Route::get('/get_items_for_report',[ReportsController::class, 'getItemsForReport']);
+Route::get('/fetch_item/{item_id}',[ReportsController::class, 'fetchItem']);
+Route::get('/get_cleared_order_items',[ReportsController::class, 'getClearedOrderItems']);
 Route::get('/get_cleared_creditor_orders',[ReportsController::class, 'getClearedCreditorOrders']);
 Route::get('/get_cleared_orders',[ReportsController::class, 'getClearedOrders']);
 
