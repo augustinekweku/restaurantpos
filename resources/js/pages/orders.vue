@@ -34,12 +34,12 @@
                                            <span class="fw-bolder"> Order # {{order.order_number}} </span> for <span class="fw-bold" style="color:orangered"> {{order.table_name}}</span>
                                             <div slot="content" class="px-4">
                                                 <div v-if="order.order_type == 'table'" class="d-flex justify-content-between">
-                                                    <div>Served</div>
                                                     <div> <Button type="success" @click="changeStatus(order, i)">Serve</Button> </div>
+                                                    <div> <Button type="error" @click="cancelOrder(order, i)">Cancel</Button> </div>
                                                 </div>
                                                 <div v-if="order.order_type == 'takeaway'" class="d-flex justify-content-between">
-                                                    <div>TakeAway Served</div>
                                                     <div><Button type="success" @click="changeStatus(order, i)">Serve</Button></div>
+                                                    <div><Button type="error" @click="cancelOrder(order, i)">Cancel</Button></div>
                                                 </div>
                                             </div>
                                         </Panel>
@@ -90,6 +90,37 @@ export default {
         this.list()
     },
     methods:{
+
+        async cancelOrder(order, i) {
+            console.log(order.ready)
+            let order_id = order.id
+            this.$swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Abort order!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+            
+            axios.post(`/app/order_aborted_by_cook/${order_id}/${order.order_type}`).then(({data})=>{
+                //console.log(data)
+                    this.Orders.data.splice(i, 1)
+                    this.$swal.fire(
+                    'Done!',
+                    'Order Successfully served',
+                    'success'
+                    )
+            }).catch(({ response })=>{
+                console.error(response)
+            })
+            }else{
+                return order.ready = !order.ready
+            }
+            })
+            },
         async changeStatus(order, i) {
             console.log(order.ready)
             let init = order.ready

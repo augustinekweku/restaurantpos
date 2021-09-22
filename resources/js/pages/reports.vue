@@ -109,7 +109,7 @@
                 :pagination-options="{
                     enabled: true
                 }"
-                @on-row-dblclick="onRowDoubleClick"
+                @on-row-click="onRowDoubleClick"
             >
                 <div slot="table-actions">
                     <Button class="mx-2" @click="printItemsTable">
@@ -222,6 +222,8 @@
                 </tbody>
             </table>
         </Modal>
+        <!-- END OF MODAL FOR VIEWING INDIVIDUAL RECORDS -->
+
     </div>
 </template>
 
@@ -267,7 +269,7 @@ export default {
                 },
                 {
                     label: "Date",
-                    field: this.dateFn,
+                    field: this.itemDateFn,
                     html:true
                 }
             ],
@@ -275,6 +277,11 @@ export default {
             reportModal: false,
             dateRangeSum: null,
             columns1: [
+                {
+                    label: "Date",
+                    field: this.orderDateFn,
+                    html:true
+                },
                 {
                     label: "Invoice",
                     field: "invoice_number"
@@ -343,17 +350,24 @@ export default {
                 this.showRangeResults = true
             }        
         },
-        dateFn(RowObj){
+        itemDateFn(RowObj){
             //return RowObj.order
             let d = new Date( RowObj.order.created_at );
             let date = d.toDateString();
-            return date
+            return `<span style="font-size:13px;">${date}</span>` 
+        },
+        orderDateFn(RowObj){
+            //return RowObj.order
+            let d = new Date( RowObj.created_at );
+            let date = d.toDateString();
+            return `<span style="font-size:13px;">${date}</span>`
         },
         itemFn(RowObj){
             return RowObj.item.item_name
         },
         sortOptionChange() {
             if (this.sortBy == "all") {
+
                 this.itemRecordsTable = false;
                 this.allRecordsTable = true;
             }
@@ -502,7 +516,7 @@ export default {
     created() {
         this.getClearedOrders();
         this.getClearedOrderItems();
-        this.getItemsForReport();
+        //this.getItemsForReport();
         this.getAllItems();
 
         console.log("object");

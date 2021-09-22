@@ -47,7 +47,7 @@
                                         </Panel>
                                     </Collapse>
                                     <ul class="p-2">
-                                        <li v-for="(orderDetail, i) in order.order_details" :key="i">
+                                        <li v-for="(orderDetail, i) in order.creditor_order_details" :key="i">
                                             <p class="fs-6 pb-1">
                                                 {{orderDetail.item_name}} X {{orderDetail.quantity}}
                                             </p>

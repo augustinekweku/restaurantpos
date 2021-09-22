@@ -18,7 +18,7 @@
                 <div class="_navbar_left">
                     <div class="_navbar_logo d-flex">
                         <div>
-                        <h2 class="_navbar_logo_img">S</h2>
+                        <span class="_navbar_logo_img"> <img src="/logo.png" alt="" srcset=""></span>
                         </div>
                         <div>
                         <h3 class="_navbar_logo_img_text">somewhere</h3>
@@ -338,7 +338,7 @@
                                     || $store.state.user.userType === 'waiter'"
                                 >
                                     <Icon type="ios-card" style="color:#7a4a59 !important" />
-                                    <span class="submenu_text"
+                                    <span class="submenu_text fw-light"
                                         > Creditor POS</span
                                     >
                                 </MenuItem>
@@ -350,8 +350,8 @@
                                 $store.state.user.userType === 'cook'"
                                 >
                                     <Icon type="ios-clock" style="color:#7a4a59 !important" />
-                                    <span class="submenu_text"
-                                        >Orders on Credit</span
+                                    <span class="submenu_text fw-light"
+                                        >Orders on Credit <Tag v-if="CreditOrderNotificationsCount>0" color="error">{{CreditOrderNotificationsCount}}</Tag> </span
                                     >
                                 </MenuItem>
                                 <MenuItem
@@ -362,8 +362,8 @@
                                 $store.state.user.userType === 'waiter'"
                                 >
                                     <Icon type="ios-alarm" style="color:#7a4a59 !important" />
-                                    <span class="submenu_text"
-                                        >Orders pending payment</span
+                                    <span class="submenu_text fw-light"
+                                        >Orders pending payment<Tag class="me-2" v-if="CreditReadyOrdersCount>0" color="error">{{CreditReadyOrdersCount}}</Tag> </span
                                     >
                                 </MenuItem>
                                 <MenuItem
@@ -374,7 +374,7 @@
                                 $store.state.user.userType === 'waiter'"
                                 >
                                     <Icon type="md-analytics" style="color:#7a4a59 !important" />
-                                    <span class="submenu_text"
+                                    <span class="submenu_text fw-light"
                                         > Report</span
                                     >
                                 </MenuItem>
@@ -496,6 +496,8 @@ export default {
         return {
             orderNotificationsCount: 0,
             readyOrdersCount: 0,
+            CreditOrderNotificationsCount: 0,
+            CreditReadyOrdersCount: 0,
             userSession: [],
             activeRoute: "index",
             sidebar: false,
@@ -517,6 +519,26 @@ export default {
             );
             if (getOrdersCount.data !== this.orderNotificationsCount) {
                 this.orderNotificationsCount = getOrdersCount.data
+            }
+            
+        },
+        async getRequestedCreditOrdersCount(){
+            const getOrdersCount = await this.callApi(
+                "get",
+                `app/get_requested_credit_orders_count/${this.CreditOrderNotificationsCount}`
+            );
+            if (getOrdersCount.data !== this.CreditOrderNotificationsCount) {
+                this.CreditOrderNotificationsCount = getOrdersCount.data
+            }
+            
+        },
+        async getReadyCreditOrdersCount(){
+            const getOrdersCount = await this.callApi(
+                "get",
+                "app/get_ready_credit_orders_count"
+            );
+            if (getOrdersCount.status == 200) {
+                this.CreditReadyOrdersCount = getOrdersCount.data
             }
         },
         async getReadyOrdersCount(){
@@ -550,8 +572,10 @@ export default {
         console.log(this.$route.path)
         this.activeRoute = this.$route.name;
         this.userSession = this.$store.state.user
-        //setInterval(this.getRequestedOrdersCount, 2000)
-        //setInterval( this.getReadyOrdersCount ,2000)
+        // setInterval(this.getRequestedOrdersCount, 2000)
+        // setInterval( this.getReadyOrdersCount ,2000)
+        // setInterval(this.getRequestedCreditOrdersCount, 2000)
+        // setInterval( this.getReadyCreditOrdersCount ,2000)
 
     }
 };

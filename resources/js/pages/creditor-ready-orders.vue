@@ -27,7 +27,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(orderDetails, i) in order.order_details" :key="i" class="animate__animated animate__fadeIn">
+                                <tr v-for="(orderDetails, i) in order.creditor_order_details" :key="i" class="animate__animated animate__fadeIn">
                                 <th scope="row">{{i+1}}</th>
                                 <td>{{orderDetails.item_name}}</td>
                                 <td>{{  orderDetails.price }}</td>
@@ -114,7 +114,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(orderDetails, i) in printOrderData.order_details" :key="i" class="animate__animated animate__fadeIn">
+                                <tr v-for="(orderDetails, i) in printOrderData.creditor_order_details" :key="i" class="animate__animated animate__fadeIn">
                                 <th scope="row">{{i+1}}</th>
                                 <td>{{orderDetails.item_name}}</td>
                                 <td>{{  orderDetails.price }}</td>

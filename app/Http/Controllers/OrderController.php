@@ -8,6 +8,7 @@ use App\Models\Table;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Models\Creditor_order;
+use App\Models\Creditor_order_details;
 use App\Models\Item;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -72,30 +73,38 @@ class OrderController extends Controller
 
     public function createCreditorOrder(Request $request)
     {
-            $user = Auth::user();
             
-                //insert order details
-            $order = Creditor_order::create([
-                'company_id' => $request->company_id,
-                'order_total' => $request->order_total,
-                'order_number' => $request->order_number,
-                'invoice_number' => $request->invoice_number,
-                'status' => 2,
-                'user_id' => $user->id,
-                'notes' => $request->notes,
-                'due_date' => $request->due_date
-            ]);
-            $order->save();
-            $order_details = $request->order_details;
-            $orderDetails = [];
-            foreach($order_details as $od => $x){
-                array_push($orderDetails, ['item_id' => $x['item_id'], 'item_name' => $x['item_name'],
-                'creditor_order_id' => $order->id, 'price' =>$x['price'], 'quantity'=> $x['quantity'], 'amount' => $x['amount']]);
-                //echo json_encode($x['item_name']);
-
+            DB::beginTransaction();
+            try {
+                $user = Auth::user();
+                
+                    //insert order details
+                $order = Creditor_order::create([
+                    'company_id' => $request->company_id,
+                    'order_total' => $request->order_total,
+                    'order_number' => $request->order_number,
+                    'invoice_number' => $request->invoice_number,
+                    'status' => 2,
+                    'user_id' => $user->id,
+                    'notes' => $request->notes,
+                    'due_date' => $request->due_date
+                ]);
+                $order->save();
+                $order_details = $request->order_details;
+                $orderDetails = [];
+                foreach($order_details as $od => $x){
+                    array_push($orderDetails, ['item_id' => $x['item_id'], 'item_name' => $x['item_name'],
+                    'creditor_order_id' => $order->id, 'price' =>$x['price'], 'quantity'=> $x['quantity'], 'amount' => $x['amount']]);
+                    //echo json_encode($x['item_name']);
+    
+                }
+                    Creditor_order_details::insert($orderDetails);
+                    DB::commit();
+                //code...
+            } catch (Exception $e) {
+                DB::rollback();
+                return $e;
             }
-                OrderDetail::insert($orderDetails);
-                DB::commit();
 
     }
 
@@ -119,7 +128,7 @@ class OrderController extends Controller
 
     public function getRequestedCreditorOrders(Request $request)
     {
-         $orders = Creditor_order::where('status','=', 2)->with('orderDetails', 'company')->paginate(10);
+         $orders = Creditor_order::where('status','=', 2)->with('creditor_order_details', 'company')->paginate(10);
          return response()->json($orders);
 
         //$getOrders = DB::table('Orders')->where('status', '=', 2)-with('orderDetails')->get();
@@ -145,7 +154,7 @@ class OrderController extends Controller
 
     public function getCreditorReadyOrders(Request $request)
     {
-         $orders = Creditor_order::where('status', 3)->with('orderDetails', 'company')->paginate(10);
+         $orders = Creditor_order::where('status', 3)->with('creditor_order_details', 'company')->paginate(10);
          return response()->json($orders);
 
         //$getOrders = DB::table('Orders')->where('status', '=', 2)-with('orderDetails')->get();
@@ -165,6 +174,22 @@ class OrderController extends Controller
             return Order::where('id', $order_id)->update([
                 'ready' => 1,
                 'status' => 3
+            ]);          
+        }
+    }
+    
+    public function orderAbortedByCook($order_id, $order_type)
+    {
+        if ($order_type == 'takeaway') {
+            return Order::where('id', $order_id)->update([
+                'ready' => 0,
+                'status' => 4,
+            ]);          
+        }
+        if ($order_type == 'table') {
+            return Order::where('id', $order_id)->update([
+                'ready' => 0,
+                'status' => 4
             ]);          
         }
     }

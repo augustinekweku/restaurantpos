@@ -23,9 +23,9 @@ class Creditor_order extends Model
         'due_date',
     ];
 
-    public function orderDetails()
+    public function creditor_order_details()
     {
-        return $this->hasMany(OrderDetail::class, 'creditor_order_id', 'id');
+        return $this->hasMany(Creditor_order_details::class, 'creditor_order_id', 'id');
     }
     public function user()
     {

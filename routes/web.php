@@ -34,6 +34,8 @@ Route::prefix('app')->group(function(){
 
 Route::get('/get_ready_orders_count',[NotificationsController::class, 'getReadyOrdersCount']);
 Route::get('/get_requested_orders_count/{old_count}',[NotificationsController::class, 'getRequestedOrdersCount']);
+Route::get('/get_ready_credit_orders_count',[NotificationsController::class, 'getReadyCreditOrdersCount']);
+Route::get('/get_requested_credit_orders_count/{old_count}',[NotificationsController::class, 'getRequestedCreditOrdersCount']);
 
 Route::get('/get_inventory_records',[ReportsController::class, 'getInventoryRecords']);
 
@@ -43,11 +45,13 @@ Route::post('/login',[AuthController::class, 'login']);
 Route::get('/get_cleared_creditor_date_range/{fromDate}/{toDate}',[ReportsController::class, 'getClearedCreditorDateRange']);
 Route::get('/get_date_range/{fromDate}/{toDate}',[ReportsController::class, 'getDateRange']);
 Route::get('/get_date_range_for_item/{fromDate}/{toDate}/{item_id}',[ReportsController::class, 'getDateRangeForItem']);
+Route::get('/get_date_range_for_creditor_item/{fromDate}/{toDate}/{item_id}',[ReportsController::class, 'getDateRangeForCreditorItem']);
 
 
 Route::get('/get_all_items',[ReportsController::class, 'getAllItems']);
-Route::get('/get_items_for_report',[ReportsController::class, 'getItemsForReport']);
+Route::get('/get_items_for_creditor_report',[ReportsController::class, 'getItemsForCreditorReport']);
 Route::get('/fetch_item/{item_id}',[ReportsController::class, 'fetchItem']);
+Route::get('/fetch_creditor_item/{item_id}',[ReportsController::class, 'fetchCreditorItem']);
 Route::get('/get_cleared_order_items',[ReportsController::class, 'getClearedOrderItems']);
 Route::get('/get_cleared_creditor_orders',[ReportsController::class, 'getClearedCreditorOrders']);
 Route::get('/get_cleared_orders',[ReportsController::class, 'getClearedOrders']);
@@ -73,6 +77,7 @@ Route::post('/checkout_order',[OrderController::class, 'checkoutOrder']);
 Route::post('/checkout_take_away_order',[OrderController::class, 'checkoutTakeAwayOrder']);
 Route::get('/get_ready_orders',[OrderController::class, 'getReadyOrders']);
 Route::post('/order_confirmed_by_cook/{order_id}/{order_type}',[OrderController::class, 'orderConfirmedByCook']);
+Route::post('/order_aborted_by_cook/{order_id}/{order_type}',[OrderController::class, 'orderAbortedByCook']);
 Route::get('/get_requested_orders',[OrderController::class, 'getRequestedOrders']);
 Route::post('/create_order_details',[OrderController::class, 'createOrderDetails']);
 

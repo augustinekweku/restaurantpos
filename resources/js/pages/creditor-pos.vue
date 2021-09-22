@@ -93,7 +93,7 @@
                 <vue-good-table
                     :columns="columns1"
                     :rows="items"
-                    @on-row-dblclick="onRowDoubleClick"
+                    @on-row-click="onRowDoubleClick"
                     :search-options="{
                             enabled: true
                         }"
