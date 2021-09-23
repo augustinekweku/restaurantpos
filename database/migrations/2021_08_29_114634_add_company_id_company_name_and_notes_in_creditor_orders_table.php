@@ -14,7 +14,7 @@ class AddCompanyIdCompanyNameAndNotesInCreditorOrdersTable extends Migration
     public function up()
     {
         Schema::table('creditor_orders', function (Blueprint $table) {
-            $table->integer('company_id');
+            $table->unsignedBigInteger('company_id');
             $table->string('company_name');
             $table->text('notes')->nullable();
         });

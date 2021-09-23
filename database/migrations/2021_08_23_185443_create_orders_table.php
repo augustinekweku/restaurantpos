@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('table_id');
+            $table->unsignedBigInteger('table_id');
             $table->enum('status', ['hold','empty','unpaid','aborted']);
             $table->unsignedDecimal('amount');
             $table->unsignedDecimal('paid');

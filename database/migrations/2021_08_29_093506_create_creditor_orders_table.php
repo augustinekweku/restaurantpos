@@ -15,7 +15,7 @@ class CreateCreditorOrdersTable extends Migration
     {
         Schema::create('creditor_orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('item_id');
+            $table->unsignedBigInteger('item_id');
             $table->integer('discount')->nullable();
             $table->string('payment_type');
             $table->string('invoice_number');

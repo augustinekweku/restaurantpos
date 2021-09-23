@@ -14,8 +14,8 @@ class AddCreditorOrderIdFieldAndAddNullableToOrderIdInOrdersDetailsTable extends
     public function up()
     {
         Schema::table('order_details', function (Blueprint $table) {
-            $table->integer('creditor_order_id')->nullable();
-            $table->integer('order_id')->nullable()->change();
+            $table->unsignedBigInteger('creditor_order_id')->nullable();
+            $table->unsignedBigInteger('order_id')->nullable()->change();
         });
     }
 

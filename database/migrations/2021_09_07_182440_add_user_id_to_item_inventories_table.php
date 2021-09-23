@@ -14,7 +14,7 @@ class AddUserIdToItemInventoriesTable extends Migration
     public function up()
     {
         Schema::table('items_inventories', function (Blueprint $table) {
-            $table->bigInteger('user_id');
+            $table->unsignedBigInteger('user_id');
         });
     }
 

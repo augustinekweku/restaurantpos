@@ -16,7 +16,7 @@ class CreateTablesTable extends Migration
         Schema::create('tables', function (Blueprint $table) {
             $table->id();
             $table->string('table_name');
-            $table->string('order_id');
+            $table->unsignedBigInteger('order_id');
             $table->enum('status', ['occupied', 'unpaid', 'empty'])->default('empty');
             $table->timestamps();
         });
