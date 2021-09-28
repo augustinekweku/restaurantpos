@@ -14,7 +14,7 @@ class AddUserIdInCreditorOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::table('Creditor_orders', function (Blueprint $table) {
+        Schema::table('creditor_orders', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
         });
     }
