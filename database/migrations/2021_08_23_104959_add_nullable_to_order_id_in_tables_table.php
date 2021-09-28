@@ -7,6 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddNullableToOrderIdInTablesTable extends Migration
 {
+    protected $connection = 'pgsql';
     /**
      * Run the migrations.
      *
