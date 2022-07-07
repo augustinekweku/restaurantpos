@@ -192,7 +192,7 @@ export default {
             value1: '',
             addModal: false,
             isAdding: false,
-
+            editModal: false,
             form: {
                 firstName: "",
                 lastName: "",

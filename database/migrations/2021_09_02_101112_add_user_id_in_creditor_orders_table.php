@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class AddUserIdInCreditorOrdersTable extends Migration
 {
-    protected $connection = 'pgsql';
+    
+    // protected $connection = 'pgsql';
     /**
      * Run the migrations.
      *
